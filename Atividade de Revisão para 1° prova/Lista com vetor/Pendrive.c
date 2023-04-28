@@ -15,17 +15,6 @@ typedef struct {
     Pendrive *elementos;
 } Lista;
 
-// * criarLista()
-// * excluirLista()
-// * imprimirElementos()
-// * inserirElemento()
-// * inserirElementoInicio()
-// inserirElementoID()
-// * removerElemento()
-// * removerElementoNome()
-// * buscarElemento()
-// * AtualizarElemento()
-
 Lista* criarLista() {
     Lista *nova = (Lista*)malloc(sizeof(Lista));
     if(nova == NULL) {
@@ -86,7 +75,6 @@ int inserirElemento(Lista *lista, char *nome, float tamanho, char particao) {
         printf("Espaco esgotado\n");
         return 0;
     }
-
     return 1;
 }
 
@@ -121,26 +109,24 @@ int inserirElementoID(Lista *lista, char *nome, float tamanho, char particao, in
     }
 
     if (lista->id < TAM) {
-        for (i = 0; i < lista->id; ++i) {
-            if (posicao < lista->id) {
-                for (i = lista->id; i > posicao; --i) {
-                    strcpy(lista->elementos[i].nomeArquivo, lista->elementos[i-1].nomeArquivo);
-                    lista->elementos[i].tamanhoArquivo = lista->elementos[i-1].tamanhoArquivo;
-                    lista->elementos[i].particao = lista->elementos[i-1].particao;
-                }
-                strcpy(lista->elementos[posicao].nomeArquivo, nome);
-                lista->elementos[posicao].tamanhoArquivo = tamanho;
-                lista->elementos[posicao].particao = particao;
-                ++(lista->id);
-            } else {
-                printf("Posicao fora do intervalo definido\n");
-                return 0;
+        if (posicao < lista->id) {
+            for (i = lista->id; i > posicao; --i) {
+                strcpy(lista->elementos[i].nomeArquivo, lista->elementos[i-1].nomeArquivo);
+                lista->elementos[i].tamanhoArquivo = lista->elementos[i-1].tamanhoArquivo;
+                lista->elementos[i].particao = lista->elementos[i-1].particao;
             }
-        } 
+            strcpy(lista->elementos[posicao].nomeArquivo, nome);
+            lista->elementos[posicao].tamanhoArquivo = tamanho;
+            lista->elementos[posicao].particao = particao;
+            ++(lista->id);
+        } else {
+            printf("Posicao fora do intervalo definido\n");
+        }
     } else {
             printf("Nao ha mais espaço\n");
             return 0;
     }
+    return 1;
 }
 
 int removerElemento(Lista *lista, int id) {
@@ -257,7 +243,7 @@ int main() {
             }
 
             if (opcaoInserir == 3) {
-                inserirElementoID(pendrive, "exercicio5.c", 321.3, 'L', 3);
+                inserirElementoID(pendrive, "README", 321.3, 'L', 0);
                 imprimirElementos(pendrive);
             }
         }
@@ -297,6 +283,7 @@ int main() {
     printf("Escolha a operacao a ser realizada:\n1. Ver arquivos\n2. Inserir Arquivos\n3. Buscar Arquivos\n4. Excluir arquivo\n5. Atualizar elemento\n");
     printf("Insira aqui: ");
     scanf("%d", &opcaoEscolhida);
+    printf("\n");
     }
 }
     
