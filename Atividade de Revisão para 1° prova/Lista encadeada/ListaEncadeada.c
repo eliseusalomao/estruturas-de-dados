@@ -50,7 +50,6 @@ int inserirElemento(Lista *lista, int valor) {
 }
 
 void imprimirElementos(Lista *lista) {
-    ListaNo *p;
 
     if (lista == NULL) {
         printf("A lista nao foi criada");
@@ -62,9 +61,11 @@ void imprimirElementos(Lista *lista) {
         return ;
     }
 
-    for (p = lista->prim; p->prox != NULL; p = p->prox) {
-        printf("%d\n", p->valor);
+    ListaNo *p;
+    for (p = lista->prim; p != NULL; p = p->prox) {
+        printf("%d ", p->valor);
     }
+    printf("\n");
 }
 
 ListaNo* buscarElemento(Lista *lista, int valor) {
@@ -138,7 +139,7 @@ int main() {
     inserirElemento(lista, 2);
     inserirElemento(lista, 3);
     inserirElemento(lista, 4);
-    inserirElemento(lista, 5);
+    inserirElemento(lista, 5); 
     imprimirElementos(lista);
 
     ListaNo *resultadoBusca = buscarElemento(lista, 4);
@@ -146,7 +147,7 @@ int main() {
         printf("Resultado encontrado: %d", resultadoBusca->valor);
         printf("\n");
     }
-    removerElemento(lista, 5);
+   removerElemento(lista, 4); 
    
    imprimirElementos(lista);
 }
