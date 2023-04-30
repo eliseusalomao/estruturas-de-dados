@@ -2,6 +2,7 @@
 
 ## Estruturas implementadas:
 - Lista com vetores
+- Lista simplesmente encadeada clássica
 
 ## Implementações em andamento:
-- Lista dinâmica
+- Lista simplesmente encadeada com estrutura personalizada
