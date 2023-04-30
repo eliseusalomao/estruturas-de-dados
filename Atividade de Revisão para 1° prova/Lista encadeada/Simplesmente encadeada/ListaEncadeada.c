@@ -131,6 +131,16 @@ int removerElemento(Lista *lista, int valor) {
     }
 }
 
+Lista* excluirLista(Lista *lista) {
+    ListaNo* aux;
+
+    while(lista->prim != NULL) {
+        aux = lista->prim;
+        lista->prim = lista->prim->prox;
+        free(aux);
+    }
+}
+
 int main() {
     Lista *lista;
     lista = criarLista();
@@ -149,5 +159,9 @@ int main() {
     }
    removerElemento(lista, 4); 
    
+   imprimirElementos(lista);
+
+   excluirLista(lista);
+
    imprimirElementos(lista);
 }
