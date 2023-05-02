@@ -96,6 +96,73 @@ Pendrive* buscarElemento(Computador *pen_drive, char *data) {
     return NULL;
 }
 
+int removerElemento(Computador *pen_drive, char *nome) {
+    
+    if (pen_drive == NULL) {
+        printf("A lista nao foi criada\n");
+        return 0;
+    }
+
+    if (pen_drive->prim == NULL) {
+        printf("A lista esta vazia\n");
+        return 0;
+    }
+
+    Pendrive *p, *aux;
+    if (strcmp(pen_drive->prim->nome, nome) == 0) {
+        p = pen_drive->prim;
+        pen_drive->prim = pen_drive->prim->prox;
+        printf("Removendo do inicio.\n");
+        imprimirElementos(pen_drive);
+        free(p);
+        return 1;
+    }
+
+    for (p = pen_drive->prim; p->prox != NULL; p = p->prox) {
+        if (strcmp(p->prox->nome, nome) == 0) {
+            aux = p->prox;
+            p->prox = p->prox->prox;
+            printf("Removendo do meio\n");
+            imprimirElementos(pen_drive);
+            free(aux);
+            return 1;
+        }
+    }
+
+    if (strcmp(p->prox->nome, nome) == 0) {
+        aux = p->prox;
+        p->prox = NULL;
+        printf("Removendo ultimo elemento\n");
+        imprimirElementos(pen_drive);
+        free(aux);
+        return 1;
+    }
+}
+
+Pendrive* atualizarElemento(Computador *pen_drive, char *busca, char *dataAlteracao) {
+    
+    if (pen_drive == NULL) {
+        printf("A lista nao foi criada\n");
+        return 0;
+    }
+
+    if (pen_drive->prim == NULL) {
+        printf("A lista esta vazia\n");
+        return 0;
+    }
+
+    Pendrive *p;
+    for (p = pen_drive->prim; p != NULL; p = p->prox) {
+        if (strcmp(p->data, busca) == 0) {
+            p->data = dataAlteracao;
+            printf("O arquivo foi atualizado\n");
+            imprimirElementos(pen_drive);
+        }
+    }
+
+    return 0;
+}
+
 Computador* excluirLista(Computador *pen_drive) {
     Pendrive *aux;
     
@@ -121,9 +188,11 @@ int main() {
 
     Pendrive *buscar = buscarElemento(pen_drive, "28/04/2023");
     if (buscar != NULL) {
-        printf("Elemento encontrado");
+        printf("Elemento encontrado\n");
+        removerElemento(pen_drive, buscar->nome);
     }
 
+    atualizarElemento(pen_drive, "30/04/2023", "02/05/2023");
     excluirLista(pen_drive);
 
 }
