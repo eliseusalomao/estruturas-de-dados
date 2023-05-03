@@ -1,7 +1,24 @@
+/***********************************************************
+* Nome: lista com vetores                                  *
+* Autor: Eliseu Salomão                                    *
+* Turma: 301B                                              *
+* Professor: Mayrton Dias                                  *
+* Disciplina: Estrutura de Dados                           *
+* Descrição: implementação de lista com vetor, com as      *
+*            operações de:  criar lista,                   *                   
+*                           inserir elemento,              *    
+*                           imprimir elentos,              *
+*                           buscar elemento,               *
+*                           remover elemento,              *
+*                           atualizar elemento e           *     
+*                           excluir lista.                 *                                                  
+***********************************************************/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
+// definindo estruturas
 typedef struct computador Computador;
 typedef struct pendrive Pendrive;
 
@@ -16,56 +33,86 @@ struct pendrive {
     Pendrive *prox;
 };
 
+
+/* Nome: criarLista
+ * Parametro: nenhum          
+ * Retorno: retorna um endereço reservado por malloc
+ * Descricao: função implementada para criar a lista
+ */
 Computador* criarLista() {
+    // alocando espaço em memória para a estrutura Computador
     Computador *memoria = (Computador*)malloc(sizeof(Computador));
 
+    // verificando se a lista foi criada
     if(memoria == NULL) {
         printf("A lista não foi criada\n");
         return 0;
     }
 
+    // iniciando o primeiro elemento como nulo, pois ainda não foi inserido nada
     memoria->prim = NULL;
     return memoria;
 }
 
+
+/* Nome: inserirElemento
+ * Parametro: a própria lista, nomeArquivo, tamanhoArquivo e dataCriacao        
+ * Retorno: retorna um inteiro indicando se a operação foi bem sucedida ou não
+ * Descricao: função implementada para inserir elementos na lista
+ */
 int inserirElemento(Computador *pen_drive, char *nomeArquivo, float tamanhoArquivo, char *dataCriacao) {
+    // alocando espaço em memória para a estrutura Pendrive
     Pendrive *memoria = (Pendrive*)malloc(sizeof(Pendrive)); 
 
+    // verificando se a lista foi criada
     if (memoria == NULL) {
-        printf("Sem espaço\n");
+        printf("A lista nao foi criada\n");
         return 0;
     }
 
+    // iniciando os campos da estrutura Pendrive através do espaço alocado memoria com os valores passados como parâmetros
     memoria->nome = nomeArquivo;
     memoria->tamanho = tamanhoArquivo;
     memoria->data = dataCriacao;
     memoria->prox = NULL;
 
+    // se a lista (pen_drive) estiver vazia, a lista irá apontar para o espaço alocado para os campos de Pendrive
+    // agora o primeiro elemento (prim) da lista aponta para os campos inicializados acima
     if (pen_drive->prim == NULL) {
         pen_drive->prim = memoria;
         return 1;
     }
 
+    // p percorre toda a lista (pen_drive) até p->prox ser diferente de nulo
     Pendrive *p;
     for (p = pen_drive->prim; p->prox != NULL; p = p->prox);
 
+    // assim, o último elemento (p->prox) aponta para o espaço alocado para Pendrive
     p->prox = memoria;
 
     return 1; 
 }
 
+/* Nome: imprimirElementos
+ * Parametro: a própria lista     
+ * Retorno: retorna void, é um procedimento para imprimir elementos no prompt
+ * Descricao: função implementada para imprimir elementos da lista
+ */
 void imprimirElementos(Computador *pen_drive) {
 
+    // verifica se a lista foi criada
     if (pen_drive == NULL) {
         printf("A lista nao foi criada\n");
         return ;
     }
 
+    // verifica se o primeiro elemento existe na lista
     if (pen_drive->prim == NULL) {
         printf("A lista esta vazia\n");
         return ;
     }
 
+    // percorrendo toda a lista (pen_drive) imprimindo os valores do campos
     Pendrive *p;
     printf("Nome\t\tTamanho\t\tData\t\n");
     for (p = pen_drive->prim; p != NULL; p = p->prox) {
@@ -74,21 +121,30 @@ void imprimirElementos(Computador *pen_drive) {
     printf("\n");
 }
 
+/* Nome: buscarElemento
+ * Parametro: a própria lista e data     
+ * Retorno: retorna um endereço que corresponde a um elemento da lista
+ * Descricao: função implementada para buscar elementos na lista
+ */
 Pendrive* buscarElemento(Computador *pen_drive, char *data) {
-
+    
+    // verificando se a lista (pen_drive) foi criada
     if (pen_drive == NULL) {
         printf("A lista nao foi criada\n");
         return 0;
     }
 
+    //  verificando se a lista não está vazia
     if (pen_drive->prim == NULL) {
         printf("A lista esta vazia\n");
         return 0;
     }
 
+    // percorrendo a lista com p e verificando se algum campo data corresponde ao valor passando de data
     Pendrive *p;
     for(p = pen_drive->prim; p->prox != NULL; p = p->prox) {
         if(strcmp(p->data, data) == 0) {
+            // retornando o elemento correspondente
             return p;
         }
     }
@@ -96,18 +152,26 @@ Pendrive* buscarElemento(Computador *pen_drive, char *data) {
     return NULL;
 }
 
+/* Nome: removerElemento
+ * Parametro: a própria lista e um nome
+ * Retorno: retorna um inteiro indicando se a operação foi bem sucedida ou não
+ * Descricao: função implementada para remover elementos da lista
+ */
 int removerElemento(Computador *pen_drive, char *nome) {
     
+    // verificando se a lista foi criada
     if (pen_drive == NULL) {
         printf("A lista nao foi criada\n");
         return 0;
     }
 
+    // verificando se a lista possui elemento
     if (pen_drive->prim == NULL) {
         printf("A lista esta vazia\n");
         return 0;
     }
 
+    // verificando o primeiro elemento corresponde ao elemento passado
     Pendrive *p, *aux;
     if (strcmp(pen_drive->prim->nome, nome) == 0) {
         p = pen_drive->prim;
@@ -118,6 +182,7 @@ int removerElemento(Computador *pen_drive, char *nome) {
         return 1;
     }
 
+    // percorrendo a lista entre e incluindo o segundo até o penúltimo elemento
     for (p = pen_drive->prim; p->prox != NULL; p = p->prox) {
         if (strcmp(p->prox->nome, nome) == 0) {
             aux = p->prox;
@@ -129,6 +194,7 @@ int removerElemento(Computador *pen_drive, char *nome) {
         }
     }
 
+    // verificando se o último elemento corresponde ao valor passado
     if (strcmp(p->prox->nome, nome) == 0) {
         aux = p->prox;
         p->prox = NULL;
@@ -139,18 +205,26 @@ int removerElemento(Computador *pen_drive, char *nome) {
     }
 }
 
-Pendrive* atualizarElemento(Computador *pen_drive, char *busca, char *dataAlteracao) {
+/* Nome: atualizarElemento
+ * Parametro: a própria lista, busca e dataAlteracao     
+ * Retorno: retorna um inteiro indicando se a operação foi bem sucedida ou não
+ * Descricao: função implementada para atualizar elementos na lista
+ */
+int atualizarElemento(Computador *pen_drive, char *busca, char *dataAlteracao) {
     
+    // verificando se a lista foi criada
     if (pen_drive == NULL) {
         printf("A lista nao foi criada\n");
         return 0;
     }
 
+    // verificando se a lista possui elemento
     if (pen_drive->prim == NULL) {
         printf("A lista esta vazia\n");
         return 0;
     }
 
+    // percorrendo a lista verificando se alguma estrutura com o campo de data corresponde ao valor passado por busca
     Pendrive *p;
     for (p = pen_drive->prim; p != NULL; p = p->prox) {
         if (strcmp(p->data, busca) == 0) {
@@ -163,18 +237,33 @@ Pendrive* atualizarElemento(Computador *pen_drive, char *busca, char *dataAltera
     return 0;
 }
 
+/* Nome: excluirLista
+ * Parametro: a própria lista      
+ * Retorno: retorna nulo, que é o que fica ao desalocar a lista da memória
+ * Descricao: função responsável por desalocar a lista da memória
+ */
 Computador* excluirLista(Computador *pen_drive) {
     Pendrive *aux;
     
+    // enquanto a condição for false
     while (pen_drive->prim != NULL) {
+        // aux irá guardar a referencia que prim aponta
         aux = pen_drive->prim;
+        // prim vai apontar para o próximo elemento
         pen_drive->prim = pen_drive->prim->prox;
+        // aux vai ser desalocado da memória
         free(aux);
+        printf("\nLista excluida\n");
+        return NULL;
     }
 
-    printf("\nLista excluida\n");
 }
 
+/* Nome: main
+ * Parametro: nenhum
+ * Retorno: o tipo de retorno é um inteiro que irá diferenciar entre uma operação bem sucedida ou não
+ * Descricao: função responsável por ser a porta de entrada para execução do programa em computador
+ */
 int main() {
 
     Computador *pen_drive;
