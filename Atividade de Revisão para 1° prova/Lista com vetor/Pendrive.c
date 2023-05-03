@@ -36,7 +36,11 @@ typedef struct {
     Pendrive *elementos;
 } Lista;
 
-// função de criar lista
+/* Nome: criarLista
+ * Parametro: nenhum          
+ * Retorno: retorna um endereço reservado por malloc
+ * Descricao: função implementada para criar a lista
+ */
 Lista* criarLista() {
     Lista *nova = (Lista*)malloc(sizeof(Lista));
     if(nova == NULL) {
@@ -53,15 +57,22 @@ Lista* criarLista() {
     }
     return nova;
 }
-
-// função de excluir lista
+/* Nome: excluirLista
+ * Parametro: recebe a lista como parâmetro          
+ * Retorno: retorna nulo, que é o que fica ao excluir toda a lista
+ * Descricao: função responsável por desalocar a lista da memória
+ */
 Lista* excluirLista(Lista *lista) {
     free(lista->elementos);
     free(lista);
     return NULL;
 }
 
-// função de imprimir lista
+/* Nome: imprimirLista
+ * Parametro: recebe a lista como parâmetro         
+ * Retorno: o tipo de retorno é vazio
+ * Descricao: função responsável pelo procedimento de imprimir elementos em prompt
+ */
 void imprimirElementos(Lista *lista) {
     int i;
     // verificando se a lista foi criada
@@ -87,7 +98,11 @@ void imprimirElementos(Lista *lista) {
     printf("\n");
 }
 
-// função de inserir elemento
+/* Nome: inserirElemento
+ * Parametro: recebe a própria lista, nome, tamanho e particao como parâmetros        
+ * Retorno: o tipo de retorno é um inteiro
+ * Descricao: função que insere elementos na última posição do vetor
+ */
 int inserirElemento(Lista *lista, char *nome, float tamanho, char particao) {
     // verificando se a lista está vazia
     if(lista == NULL) {
@@ -109,7 +124,11 @@ int inserirElemento(Lista *lista, char *nome, float tamanho, char particao) {
     return 1;
 }
 
-// função de inserir elemento no inicio
+/* Nome: inserirElemento
+ * Parametro: recebe a própria lista, nome, tamanho e particao como parâmetros       
+ * Retorno: o tipo de retorno é um inteiro
+ * Descricao: função que insere elementos na primeira posição do vetor
+ */
 int inserirElementoInicio(Lista *lista, char *nome, float tamanho, char particao) {
     int i;
     // verificando se a lista foi criada
@@ -138,7 +157,11 @@ int inserirElementoInicio(Lista *lista, char *nome, float tamanho, char particao
     }
 }
 
-// função de inserir elemento por id
+/* Nome: inserirElemento
+ * Parametro: recebe a própria lista, nome, tamanho, particao e posicao como parâmetros       
+ * Retorno: o tipo de retorno é um inteiro
+ * Descricao: função que insere elementos no vetor na posição especificada pelo usuário/programador
+ */
 int inserirElementoID(Lista *lista, char *nome, float tamanho, char particao, int posicao) {
     int i;
 
@@ -152,12 +175,15 @@ int inserirElementoID(Lista *lista, char *nome, float tamanho, char particao, in
     if (lista->id < TAM) {
         // verificando se a posição passada está dentro do intervalo do tamanho do vetor
         if (posicao < lista->id) {
-            // iniciando o laço com a ultima posição do vetor, se 
+            // iniciando o laço com a ultima posição do vetor e se a posição que se quer inserir o elemento for menor que a ultima posição (elemento inserido até o momento)
+            // os elementos que estiverem em posições posteriores a passada para inserção do novo elemento, irão receber os elementos anteriores, abrindo espaço para a inserção
+            // do novo elemento na posição desejada
             for (i = lista->id; i > posicao; --i) {
                 strcpy(lista->elementos[i].nomeArquivo, lista->elementos[i-1].nomeArquivo);
                 lista->elementos[i].tamanhoArquivo = lista->elementos[i-1].tamanhoArquivo;
                 lista->elementos[i].particao = lista->elementos[i-1].particao;
             }
+            // inserindo elemento na posição desejada, já que o espaço foi liberado
             strcpy(lista->elementos[posicao].nomeArquivo, nome);
             lista->elementos[posicao].tamanhoArquivo = tamanho;
             lista->elementos[posicao].particao = particao;
@@ -172,50 +198,72 @@ int inserirElementoID(Lista *lista, char *nome, float tamanho, char particao, in
     return 1;
 }
 
+/* Nome: removerElemento
+ * Parametro: recebe a própria lista e id como parâmetros      
+ * Retorno: o tipo de retorno é um inteiro que irá diferenciar entre uma operação bem sucedida ou não
+ * Descricao: função que remove elementos no vetor em uma posição especificada pelo usuário/programador
+ */
 int removerElemento(Lista *lista, int id) {
     int i;
 
+    // verifica se a lista está vazia
     if(lista == NULL) {
         printf("A lista nao foi criada");
         return 0;
     }
 
+    // se o id for menor que lista->id, o valor passado está dentro do intervalo do tamanho do vetor
     if(id < lista->id) {
+        // i recebe o id, enquanto o i (id) for menor que o tamanho do vetor (-1 porque o elemento ao ser inserido está na posição 0, mas o id contabiliza como 1)
+        // os valores posteriores serão passados para os elementos anteriores a eles, deixando o último espaço vazio
         for(i = id; i < lista->id-1; ++i) {
             strcpy(lista->elementos[i].nomeArquivo, lista->elementos[i+1].nomeArquivo);
             lista->elementos[i].tamanhoArquivo = lista->elementos[i+1].tamanhoArquivo;
             lista->elementos[i].particao = lista->elementos[i+1].particao;
         }
+        // após deixar o último espaço vazio, decrementa-se o lista->id, deixando o espaço inacessível
         --(lista->id);
         return 1;
     }
     return 0;
 }
 
-// função de remover elemento por nome
+/* Nome: removerElementoNome
+ * Parametro: recebe a própria lista e nome como parâmetros      
+ * Retorno: o tipo de retorno é um inteiro que irá diferenciar entre uma operação bem sucedida ou não
+ * Descricao: função que remove elementos no vetor com base na comparação de nomes iguais (um passado pelo programador e um que existe na memória) especificada pelo usuário/programador
+ */
 int removerElementoNome(Lista *lista, char *nome) {
     int i, j;
 
-    // verificando se a lista está vazia
+    // verificando se a lista foi criada
     if (lista == NULL){
         printf("A lista nao foi criada\n");
         return 0;
     }
 
+    // laço para percorrer todos os indices e servir para verificar se algum nome dos indices corresponde ao nome passado
     for (i = 0; i < lista->id; ++i) {
+        // verificando se os nomes são compatíveis
         if (strcmp(lista->elementos[i].nomeArquivo, nome) == 0) {
+            // j recebe o i, enquanto o j (i) for menor que o tamanho do vetor os valores posteriores serão passados para os elementos anteriores a eles, deixando o último espaço vazio
             for (j = i; j < lista->id; ++j) {
                 strcpy(lista->elementos[j].nomeArquivo, lista->elementos[j+1].nomeArquivo);
                 lista->elementos[j].tamanhoArquivo = lista->elementos[j+1].tamanhoArquivo;
                 lista->elementos[j].particao = lista->elementos[j+1].particao;
             }
+            // após deixar o último espaço vazio, decrementa-se o lista->id, deixando o espaço inacessível
             --(lista->id);
             return 1;
         }
     }
 }
 
-// função de buscar elemento
+/* Nome: buscarElemento
+ * Parametro: recebe a própria lista e um nome como parâmetros      
+ * Retorno: o tipo de retorno é um inteiro que irá diferenciar entre uma operação bem sucedida ou não
+ * Descricao: função responsável por buscar no vetor um elemento compatível com o passado pelo usuário/programador no momento da busca
+ */
 int buscarElemento(Lista *lista, char *nome) {
     int i, j;
 
@@ -234,17 +282,25 @@ int buscarElemento(Lista *lista, char *nome) {
     return -1;
 }
 
-// função de atualizar um elemento da lista, alterando seus valores
+/* Nome: atualizarElemento
+ * Parametro: recebe a própria lista, busca, nome, tamanho e particao como parâmetros      
+ * Retorno: o tipo de retorno é um inteiro que irá diferenciar entre uma operação bem sucedida ou não
+ * Descricao: a função altera um elemento no vetor com os valores passados pelo usuário/programador como parâmetros
+ */
 int atualizarElemento(Lista *lista, char *busca, char *nome, float tamanho, char particao) {
     int i;
 
+    // verifica se a lista foi criada
     if (lista == NULL) {
         printf("A lista nao foi criada\n");
         return 0;
     }
 
+    // percorrendo o vetor
     for (i = 0; i < lista->id; ++i) {
+        // verificando se algum indice contém um campo que corresponde ao nome do arquivo sendo procurado
         if (strcmp(lista->elementos[i].nomeArquivo, busca) == 0) {
+            // fazendo a alteração dos valores dos campos pelos valores passados
             strcpy(lista->elementos[i].nomeArquivo, nome);
             lista->elementos[i].tamanhoArquivo = tamanho;
             lista->elementos[i].particao = particao;
@@ -252,7 +308,11 @@ int atualizarElemento(Lista *lista, char *busca, char *nome, float tamanho, char
         }
     }
 }
-
+/* Nome: main
+ * Parametro: nenhum
+ * Retorno: o tipo de retorno é um inteiro que irá diferenciar entre uma operação bem sucedida ou não
+ * Descricao: função responsável por ser a porta de entrada para execução do programa em computador
+ */
 int main() {
 
     Lista *pendrive;
