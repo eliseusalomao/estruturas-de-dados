@@ -49,6 +49,7 @@ Computador* criarLista() {
         return 0;
     }
 
+    printf("Pendrive inserido com sucesso\n");
     // iniciando o primeiro elemento como nulo, pois ainda não foi inserido nada
     memoria->prim = NULL;
     return memoria;
@@ -93,12 +94,31 @@ int inserirElemento(Computador *pen_drive, char *nomeArquivo, float tamanhoArqui
     return 1; 
 }
 
+/* Nome: inserirElementoInicio
+ * Parametro: a própria lista, nomeArquivo, tamanhoArquivo e dataCriacao        
+ * Retorno: retorna um inteiro indicando se a operação foi bem sucedida ou não
+ * Descricao: função implementada para inserir elemento no inicio da lista
+ */
+int inserirElementoInicio(Computador *pen_drive, char *nomeArquivo, float tamanhoArquivo, char *dataCriacao) {
+    Pendrive *nova = (Pendrive*)malloc(sizeof(Pendrive));
+
+    if (nova) {
+        nova->nome = nomeArquivo;
+        nova->tamanho = tamanhoArquivo;
+        nova->data = dataCriacao;
+        nova->prox = pen_drive->prim;
+        pen_drive->prim = nova;
+        return 1;
+    }
+    return 0;
+}
+
 /* Nome: imprimirElementos
  * Parametro: a própria lista     
  * Retorno: retorna void, é um procedimento para imprimir elementos no prompt
  * Descricao: função implementada para imprimir elementos da lista
  */
-void imprimirElementos(Computador *pen_drive) {
+void listarElementos(Computador *pen_drive) {
 
     // verifica se a lista foi criada
     if (pen_drive == NULL) {
@@ -152,12 +172,12 @@ Pendrive* buscarElemento(Computador *pen_drive, char *data) {
     return NULL;
 }
 
-/* Nome: removerElemento
+/* Nome: removerElementoNome
  * Parametro: a própria lista e um nome
  * Retorno: retorna um inteiro indicando se a operação foi bem sucedida ou não
- * Descricao: função implementada para remover elementos da lista
+ * Descricao: função implementada para remover elementos da lista por nome do elemento
  */
-int removerElemento(Computador *pen_drive, char *nome) {
+int removerElementoNome(Computador *pen_drive, char *nome) {
     
     // verificando se a lista foi criada
     if (pen_drive == NULL) {
@@ -177,7 +197,7 @@ int removerElemento(Computador *pen_drive, char *nome) {
         p = pen_drive->prim;
         pen_drive->prim = pen_drive->prim->prox;
         printf("Removendo do inicio.\n");
-        imprimirElementos(pen_drive);
+        listarElementos(pen_drive);
         free(p);
         return 1;
     }
@@ -188,7 +208,7 @@ int removerElemento(Computador *pen_drive, char *nome) {
             aux = p->prox;
             p->prox = p->prox->prox;
             printf("Removendo do meio\n");
-            imprimirElementos(pen_drive);
+            listarElementos(pen_drive);
             free(aux);
             return 1;
         }
@@ -199,7 +219,60 @@ int removerElemento(Computador *pen_drive, char *nome) {
         aux = p->prox;
         p->prox = NULL;
         printf("Removendo ultimo elemento\n");
-        imprimirElementos(pen_drive);
+        listarElementos(pen_drive);
+        free(aux);
+        return 1;
+    }
+}
+
+/* Nome: removerElemento
+ * Parametro: a própria lista e uma data
+ * Retorno: retorna um inteiro indicando se a operação foi bem sucedida ou não
+ * Descricao: função implementada para remover elementos da lista por data de criação de um arquivo
+ */
+int removerElemento(Computador *pen_drive, char *data) {
+    
+    // verificando se a lista foi criada
+    if (pen_drive == NULL) {
+        printf("A lista nao foi criada\n");
+        return 0;
+    }
+
+    // verificando se a lista possui elemento
+    if (pen_drive->prim == NULL) {
+        printf("A lista esta vazia\n");
+        return 0;
+    }
+
+    // verificando o primeiro elemento corresponde ao elemento passado
+    Pendrive *p, *aux;
+    if (strcmp(pen_drive->prim->data, data) == 0) {
+        p = pen_drive->prim;
+        pen_drive->prim = pen_drive->prim->prox;
+        printf("Removendo do inicio.\n");
+        listarElementos(pen_drive);
+        free(p);
+        return 1;
+    }
+
+    // percorrendo a lista entre e incluindo o segundo até o penúltimo elemento
+    for (p = pen_drive->prim; p->prox != NULL; p = p->prox) {
+        if (strcmp(p->prox->data, data) == 0) {
+            aux = p->prox;
+            p->prox = p->prox->prox;
+            printf("Removendo do meio\n");
+            listarElementos(pen_drive);
+            free(aux);
+            return 1;
+        }
+    }
+
+    // verificando se o último elemento corresponde ao valor passado
+    if (strcmp(p->prox->data, data) == 0) {
+        aux = p->prox;
+        p->prox = NULL;
+        printf("Removendo ultimo elemento\n");
+        listarElementos(pen_drive);
         free(aux);
         return 1;
     }
@@ -210,7 +283,7 @@ int removerElemento(Computador *pen_drive, char *nome) {
  * Retorno: retorna um inteiro indicando se a operação foi bem sucedida ou não
  * Descricao: função implementada para atualizar elementos na lista
  */
-int atualizarElemento(Computador *pen_drive, char *busca, char *dataAlteracao) {
+int atualizar(Computador *pen_drive, char *busca, char *dataAlteracao) {
     
     // verificando se a lista foi criada
     if (pen_drive == NULL) {
@@ -230,11 +303,40 @@ int atualizarElemento(Computador *pen_drive, char *busca, char *dataAlteracao) {
         if (strcmp(p->data, busca) == 0) {
             p->data = dataAlteracao;
             printf("O arquivo foi atualizado\n");
-            imprimirElementos(pen_drive);
+            listarElementos(pen_drive);
         }
     }
 
     return 0;
+}
+
+/* Nome: tamanho
+ * Parametro: a própria lista  
+ * Retorno: retorna um inteiro indicando o tamanho da lista
+ * Descricao: função implementada para contar os elementos na lista
+ */
+int tamanho(Computador *pen_drive) {
+    Pendrive *p;
+
+    // verificando se a lista existe
+    if (pen_drive == NULL) {
+        printf("A lista nao existe\n");
+        return 0;
+    }
+
+    // verificando se a lista está vazia
+    if (pen_drive->prim == NULL) {
+        printf("A lista esta vazia\nNumero de elementos: 0");
+        return 0;
+    }
+
+    // percorrendo todos os elementos da lista até ser nulo, a cada item passado o contador é incrementado; representando o tamanho da lista.
+    int count = 0;
+    for (p = pen_drive->prim; p != NULL; p = p->prox) {
+        count++;
+    }
+    // retornando o valor armazenado em count;
+    return count;
 }
 
 /* Nome: excluirLista
@@ -269,19 +371,54 @@ int main() {
     Computador *pen_drive;
     pen_drive = criarLista();
 
-    inserirElemento(pen_drive, "eliseu.c", 23.3, "30/04/2023");
-    inserirElemento(pen_drive, "eliseu.exe", 23.3, "29/04/2023");
-    inserirElemento(pen_drive, "ED.c\t", 23.3, "28/04/2023");
-    inserirElemento(pen_drive, "ED.exe\t", 23.3, "27/04/2023");
-    imprimirElementos(pen_drive);
+    int opcaoEscolhida;
 
-    Pendrive *buscar = buscarElemento(pen_drive, "28/04/2023");
-    if (buscar != NULL) {
-        printf("Elemento encontrado\n");
-        removerElemento(pen_drive, buscar->nome);
+    printf("Escolha a operacao a ser realizada:\n1. Ver arquivos\n2. Inserir Arquivos\n3. Buscar Arquivos\n4. Excluir arquivo\n5. Atualizar elemento\n6. Saber quantidade de arquivos\n7. Excluir lista\n");
+    printf("Insira aqui: ");
+    scanf("%d", &opcaoEscolhida);
+
+    while (opcaoEscolhida >= 1) {
+
+        switch (opcaoEscolhida) {
+            case 1:
+                listarElementos(pen_drive);
+                break;
+            case 2:
+                inserirElemento(pen_drive, "eliseu.c", 23.3, "30/04/2023");
+                inserirElemento(pen_drive, "eliseu.exe", 23.3, "29/04/2023");
+                inserirElemento(pen_drive, "ED.c\t", 23.3, "28/04/2023");
+                inserirElemento(pen_drive, "ED.exe\t", 23.3, "27/04/2023");
+                inserirElementoInicio(pen_drive, "teste.exe", 12.3, "04/05/2023");
+                break;
+            case 3:
+                Pendrive *buscar = buscarElemento(pen_drive, "28/04/2023");
+                    if (buscar != NULL) {
+                        printf("Elemento encontrado\n");
+                        
+                    }
+                break;
+            case 4: 
+                removerElementoNome(pen_drive, "ED.exe\t");
+                break;
+            case 5:
+                atualizar(pen_drive, "30/04/2023", "04/05/2023");
+                break;
+            case 6:
+                int tamanhoPendrive = tamanho(pen_drive);
+                printf("A quantidade de arquivos no pendrive é de: %d", tamanhoPendrive);
+                break;
+            case 7:
+                excluirLista(pen_drive);
+                break;
+            default:
+                printf("Opcao invalida\n");
+                break;         
+        }
+
+        printf("\n");
+
+        printf("Escolha a operacao a ser realizada:\n1. Ver arquivos\n2. Inserir Arquivos\n3. Buscar Arquivos\n4. Excluir arquivo\n5. Atualizar elemento\n6. Saber quantidade de arquivos\n7. Excluir lista\n");
+        printf("Insira aqui: ");
+        scanf("%d", &opcaoEscolhida);
     }
-
-    atualizarElemento(pen_drive, "30/04/2023", "02/05/2023");
-    excluirLista(pen_drive);
-
 }
