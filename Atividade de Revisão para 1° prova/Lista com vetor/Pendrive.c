@@ -124,7 +124,7 @@ int inserirElemento(Lista *lista, char *nome, float tamanho, char particao) {
     return 1;
 }
 
-/* Nome: inserirElemento
+/* Nome: inserirElementoInicio
  * Parametro: recebe a própria lista, nome, tamanho e particao como parâmetros       
  * Retorno: o tipo de retorno é um inteiro
  * Descricao: função que insere elementos na primeira posição do vetor
@@ -157,7 +157,7 @@ int inserirElementoInicio(Lista *lista, char *nome, float tamanho, char particao
     }
 }
 
-/* Nome: inserirElemento
+/* Nome: inserirElementoID
  * Parametro: recebe a própria lista, nome, tamanho, particao e posicao como parâmetros       
  * Retorno: o tipo de retorno é um inteiro
  * Descricao: função que insere elementos no vetor na posição especificada pelo usuário/programador
