@@ -308,6 +308,16 @@ int atualizarElemento(Lista *lista, char *busca, char *nome, float tamanho, char
         }
     }
 }
+
+/* Nome: tamanho
+ * Parametro: a própria lista
+ * Retorno: o tipo de retorno é um inteiro que irá indicar o tamanho do vetor
+ * Descricao: função responsável por retornar tamanho do vetor (arquivos inseridos no pendrive)
+ */
+int tamanho (Lista *lista) {
+    return lista->id;
+}
+
 /* Nome: main
  * Parametro: nenhum
  * Retorno: o tipo de retorno é um inteiro que irá diferenciar entre uma operação bem sucedida ou não
@@ -320,7 +330,7 @@ int main() {
 
     int opcaoEscolhida;
 
-    printf("Escolha a operacao a ser realizada:\n1. Ver arquivos\n2. Inserir Arquivos\n3. Buscar Arquivos\n4. Excluir arquivo\n5. Atualizar elemento\n");
+    printf("Escolha a operacao a ser realizada:\n1. Ver arquivos\n2. Inserir Arquivos\n3. Buscar Arquivos\n4. Excluir arquivo\n5. Atualizar elemento\n6. Saber quantidade de arquivos\n7. Excluir Lista\n");
     printf("Insira aqui: ");
     scanf("%d", &opcaoEscolhida);
 
@@ -383,6 +393,13 @@ int main() {
                 break;
             case 5: 
                 atualizarElemento(pendrive, "exercicio1.c", "eliseu.exe", 123.3, 'E');
+                break;
+            case 6:
+                int tamanhoPendrive = tamanho(pendrive);
+                printf("A quantidade de arquivos no pendrive é de: %d", tamanhoPendrive);
+                break;
+            case 7:
+                excluirLista(pendrive);
                 break;
         }
 
