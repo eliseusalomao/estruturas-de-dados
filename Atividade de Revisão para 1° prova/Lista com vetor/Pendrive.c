@@ -73,7 +73,7 @@ Lista* excluirLista(Lista *lista) {
  * Retorno: o tipo de retorno é vazio
  * Descricao: função responsável pelo procedimento de imprimir elementos em prompt
  */
-void imprimirElementos(Lista *lista) {
+void listarElementos(Lista *lista) {
     int i;
     // verificando se a lista foi criada
     if(lista == NULL) {
@@ -287,7 +287,7 @@ int buscarElemento(Lista *lista, char *nome) {
  * Retorno: o tipo de retorno é um inteiro que irá diferenciar entre uma operação bem sucedida ou não
  * Descricao: a função altera um elemento no vetor com os valores passados pelo usuário/programador como parâmetros
  */
-int atualizarElemento(Lista *lista, char *busca, char *nome, float tamanho, char particao) {
+int atualizar(Lista *lista, char *busca, char *nome, float tamanho, char particao) {
     int i;
 
     // verifica se a lista foi criada
@@ -338,7 +338,7 @@ int main() {
 
         switch (opcaoEscolhida) {
             case 1: 
-                imprimirElementos(pendrive);
+                listarElementos(pendrive);
                 break;
             case 2:
                 int opcaoInserir;
@@ -353,15 +353,15 @@ int main() {
                         inserirElemento(pendrive, "exercicio2.c", 232.3, 'H');
                         inserirElemento(pendrive, "exercicio3.c", 232.3, 'H');
                         inserirElemento(pendrive, "exercicio4.c", 232.3, 'H');
-                        imprimirElementos(pendrive);
+                        listarElementos(pendrive);
                         break;
                     case 2:
                         inserirElementoInicio(pendrive, "exercicio6.c", 231.3, 'E');
-                        imprimirElementos(pendrive);
+                        listarElementos(pendrive);
                         break;
                     case 3:
                         inserirElementoID(pendrive, "README", 321.3, 'L', 0);
-                        imprimirElementos(pendrive);
+                        listarElementos(pendrive);
                         break;
                     default:
                         printf("Nao e uma opcao valida!\n");
@@ -371,7 +371,7 @@ int main() {
                 int resultadoBusca = buscarElemento(pendrive, "eliseu.c");
                 if (resultadoBusca != -1) {
                     printf("O arquivo foi encontrado no pendrive\n");
-                    imprimirElementos(pendrive);
+                    listarElementos(pendrive);
                 } else {
                     printf("O arquivo nao foi encontrado na lista\n");
                 }
@@ -392,7 +392,7 @@ int main() {
                 }
                 break;
             case 5: 
-                atualizarElemento(pendrive, "exercicio1.c", "eliseu.exe", 123.3, 'E');
+                atualizar(pendrive, "exercicio1.c", "eliseu.exe", 123.3, 'E');
                 break;
             case 6:
                 int tamanhoPendrive = tamanho(pendrive);
