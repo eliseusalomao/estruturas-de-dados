@@ -6,10 +6,13 @@
 * Disciplina: Estrutura de Dados                           *
 * Descrição: implementação de lista com vetor, com as      *
 *            operações de:  criar lista,                   *                   
-*                           inserir elemento,              *    
+*                           inserir elemento,              *
+*                           inserir elemento início        *    
 *                           imprimir elentos,              *
 *                           buscar elemento,               *
 *                           remover elemento,              *
+*                           tamanho,                       *
+*                           remover elemento por nome      *
 *                           atualizar elemento e           *     
 *                           excluir lista.                 *                                                  
 ***********************************************************/
@@ -119,7 +122,7 @@ int inserirElementoInicio(Computador *pen_drive, char *nomeArquivo, float tamanh
 /* Nome: inserirElementoInicioID
  * Parametro: a própria lista, nomeArquivo, tamanhoArquivo, dataCriacao e ID de inserção       
  * Retorno: retorna um inteiro indicando se a operação foi bem sucedida ou não
- * Descricao: função implementada para inserir elementos no meio da lista
+ * Descricao: função implementada para inserir elementos no meio da lista por meio de um ID
  */
 int inserirElementoID(Computador *pen_drive, char *nomeArquivo, float tamanhoArquivo, char *dataCriacao, int ant) {
     Pendrive *aux, *p, *memoria = (Pendrive*)malloc(sizeof(Pendrive));
@@ -428,22 +431,56 @@ int main() {
                 listarElementos(pen_drive);
                 break;
             case 2:
-                inserirElemento(pen_drive, "eliseu.c", 23.3, "30/04/2023");
-                inserirElemento(pen_drive, "eliseu.exe", 23.3, "29/04/2023");
-                inserirElemento(pen_drive, "ED.c\t", 23.3, "28/04/2023");
-                inserirElementoID(pen_drive, "testeMeio.exe", 12.12, "05/05/2023", 3);
-                inserirElemento(pen_drive, "ED.exe\t", 23.3, "27/04/2023");
-                inserirElementoInicio(pen_drive, "teste.exe", 12.3, "04/05/2023");
+                int opcaoInserir;
+
+                printf("Deseja inserir no inicio do espaço de armazenamento, no meio ou no final?\n");
+                printf("1. Inicio\n2. Final\n3. Por ID\n");
+                printf("Insira aqui: ");
+                scanf("%d", &opcaoInserir);
+                switch (opcaoInserir) {
+                case 1: 
+                    inserirElementoInicio(pen_drive, "datastructures", 500.0, "05/05/2023");
+                    break;
+                case 2:
+                    inserirElemento(pen_drive, "eliseu.c", 23.3, "30/04/2023");
+                    inserirElemento(pen_drive, "eliseu.exe", 23.3, "29/04/2023");
+                    inserirElemento(pen_drive, "ED.c\t", 23.3, "28/04/2023");
+                    inserirElemento(pen_drive, "ED.exe\t", 23.3, "27/04/2023");
+                    break;
+                case 3:
+                    inserirElementoID(pen_drive, "testeMeio.exe", 12.12, "05/05/2023", 3);
+                    break;
+                default:
+                    printf("Opcao nao valida\n");
+                    break;
+                }
                 break;
             case 3:
                 Pendrive *buscar = buscarElemento(pen_drive, "28/04/2023");
                     if (buscar != NULL) {
                         printf("Elemento encontrado\n");
-                        
+                    } else {
+                        printf("O elemento não foi encontrado\n");
                     }
                 break;
-            case 4: 
-                removerElementoNome(pen_drive, "ED.exe\t");
+            case 4:
+                int opcaoRemover;
+
+                printf("Deseja remover por nome ou data?");
+                printf("1. Por nome\n2. Por data\n");
+                printf("Insira aqui: ");
+                scanf("%d", &opcaoRemover);
+                switch (opcaoRemover) {
+                    case 1:
+                        removerElementoNome(pen_drive, "ED.exe\t");
+                        break;
+                    case 2:
+                        removerElemento(pen_drive, "27/04/2023");
+                        break;
+                    default:
+                        printf("Opcao invalida\n");
+                        break;
+                }
                 break;
             case 5:
                 atualizar(pen_drive, "30/04/2023", "04/05/2023");
