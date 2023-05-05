@@ -5,15 +5,17 @@
 * Professor: Mayrton Dias                                  *
 * Disciplina: Estrutura de Dados                           *
 * Descrição: implementação de lista com vetor, com as      *
-*            operações de: criar lista,                    *   
+*            operações de:  criar lista,                   *   
 *                           excluir lista,                 *
 *                           inserir elemento,              *
 *                           inserir elemento no inicio,    *
 *                           inserir elemento por id,       *
 *                           remover elemento,              *
 *                           remover elemento por nome,     *
-*                           buscar elemento e              *
-*                           atualizar elemento.            *                                                   
+*                           buscar elemento,               *
+*                           atualizar,                     *
+*                           tamanho,                       *
+*                           listar.                        *
 ***********************************************************/
 
 
@@ -282,7 +284,7 @@ int buscarElemento(Lista *lista, char *nome) {
     return -1;
 }
 
-/* Nome: atualizarElemento
+/* Nome: atualizar
  * Parametro: recebe a própria lista, busca, nome, tamanho e particao como parâmetros      
  * Retorno: o tipo de retorno é um inteiro que irá diferenciar entre uma operação bem sucedida ou não
  * Descricao: a função altera um elemento no vetor com os valores passados pelo usuário/programador como parâmetros
