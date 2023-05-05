@@ -405,7 +405,7 @@ int main() {
 
         printf("\n");
 
-        printf("Escolha a operacao a ser realizada:\n1. Ver arquivos\n2. Inserir Arquivos\n3. Buscar Arquivos\n4. Excluir arquivo\n5. Atualizar elemento\n");
+        printf("Escolha a operacao a ser realizada:\n1. Ver arquivos\n2. Inserir Arquivos\n3. Buscar Arquivos\n4. Excluir arquivo\n5. Atualizar elemento\n6. Saber quantidade de arquivos\n7. Excluir Lista\n");
         printf("Insira aqui: ");
         scanf("%d", &opcaoEscolhida);
         printf("\n");
