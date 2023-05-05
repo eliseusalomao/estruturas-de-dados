@@ -343,7 +343,7 @@ int main() {
             case 2:
                 int opcaoInserir;
 
-                printf("Deseja inserir no inicio do espaço de armazenamento ou no final?\n");
+                printf("Deseja inserir no inicio do espaço de armazenamento, no meio ou no final?\n");
                 printf("1. Inicio\n2. Final\n3. Por ID\n");
                 printf("Insira aqui: ");
                 scanf("%d", &opcaoInserir);
