@@ -102,7 +102,7 @@ int inserirElemento(Computador *pen_drive, char *nomeArquivo, float tamanhoArqui
 int inserirElementoInicio(Computador *pen_drive, char *nomeArquivo, float tamanhoArquivo, char *dataCriacao) {
     Pendrive *nova = (Pendrive*)malloc(sizeof(Pendrive));
 
-    if (nova) {
+    if (nova != NULL) {
         nova->nome = nomeArquivo;
         nova->tamanho = tamanhoArquivo;
         nova->data = dataCriacao;
@@ -111,6 +111,25 @@ int inserirElementoInicio(Computador *pen_drive, char *nomeArquivo, float tamanh
         return 1;
     }
     return 0;
+}
+
+int inserirElementoID(Computador *pen_drive, char *nomeArquivo, float tamanhoArquivo, char *dataCriacao, int ant) {
+    Pendrive *aux, *nova = (Pendrive*)malloc(sizeof(Pendrive));
+
+    if (novo != NULL) [
+        nova->nome = nomeArquivo;
+        nova->tamanho = tamanhoArquivo;
+        nova->data = dataCriacao;
+        if (pen_drive->prim == NULL) {
+            nova->prox = NULL
+            pen_drive->prim = nova
+        } else {
+            aux = pen_drive->prim;
+            while (strcmp(aux->nome, ant)) {
+                
+            }
+        }
+    ]
 }
 
 /* Nome: imprimirElementos
