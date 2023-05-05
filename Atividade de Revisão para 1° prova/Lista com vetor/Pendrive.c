@@ -326,73 +326,72 @@ int main() {
 
     while (opcaoEscolhida >= 1) {
 
-        if (opcaoEscolhida == 1) {
-            imprimirElementos(pendrive);
-        }
-
-        if (opcaoEscolhida == 2) {
-            int opcaoInserir;
-
-            printf("Deseja inserir no inicio do espaço de armazenamento ou no final?\n");
-            printf("1. Inicio\n2. Final\n3. Por ID\n");
-            printf("Insira aqui: ");
-            scanf("%d", &opcaoInserir);
-
-            if (opcaoInserir == 1) {
-                inserirElemento(pendrive, "exercicio1.c", 232.3, 'H');
-                inserirElemento(pendrive, "exercicio2.c", 232.3, 'H');
-                inserirElemento(pendrive, "exercicio3.c", 232.3, 'H');
-                inserirElemento(pendrive, "exercicio4.c", 232.3, 'H');
+        switch (opcaoEscolhida) {
+            case 1: 
                 imprimirElementos(pendrive);
-            }
+                break;
+            case 2:
+                int opcaoInserir;
 
-            if (opcaoInserir == 2) {
-                inserirElementoInicio(pendrive, "exercicio6.c", 231.3, 'E');
-                imprimirElementos(pendrive);
-            }
+                printf("Deseja inserir no inicio do espaço de armazenamento ou no final?\n");
+                printf("1. Inicio\n2. Final\n3. Por ID\n");
+                printf("Insira aqui: ");
+                scanf("%d", &opcaoInserir);
+                switch (opcaoInserir) {
+                    case 1:
+                        inserirElemento(pendrive, "exercicio1.c", 232.3, 'H');
+                        inserirElemento(pendrive, "exercicio2.c", 232.3, 'H');
+                        inserirElemento(pendrive, "exercicio3.c", 232.3, 'H');
+                        inserirElemento(pendrive, "exercicio4.c", 232.3, 'H');
+                        imprimirElementos(pendrive);
+                        break;
+                    case 2:
+                        inserirElementoInicio(pendrive, "exercicio6.c", 231.3, 'E');
+                        imprimirElementos(pendrive);
+                        break;
+                    case 3:
+                        inserirElementoID(pendrive, "README", 321.3, 'L', 0);
+                        imprimirElementos(pendrive);
+                        break;
+                    default:
+                        printf("Nao e uma opcao valida!\n");
+                }
+                break;
+            case 3:
+                int resultadoBusca = buscarElemento(pendrive, "eliseu.c");
+                if (resultadoBusca != -1) {
+                    printf("O arquivo foi encontrado no pendrive\n");
+                    imprimirElementos(pendrive);
+                } else {
+                    printf("O arquivo nao foi encontrado na lista\n");
+                }
+                break;
+            case 4:
+                int tipoRemocao;
+                printf("Desja remover por indice ou nome? ");
+                scanf("%d", &tipoRemocao);
 
-            if (opcaoInserir == 3) {
-                inserirElementoID(pendrive, "README", 321.3, 'L', 0);
-                imprimirElementos(pendrive);
-            }
+                switch (tipoRemocao) {
+                    case 1: 
+                        removerElemento(pendrive, 0);
+                        printf("Elemento removido por indice");
+                        break;
+                    case 2:
+                        removerElementoNome(pendrive, "eliseu.c");
+                        printf("Elemento removido por nome");
+                }
+                break;
+            case 5: 
+                atualizarElemento(pendrive, "exercicio1.c", "eliseu.exe", 123.3, 'E');
+                break;
         }
 
-        if (opcaoEscolhida == 3) {
-            int resultadoBusca = buscarElemento(pendrive, "eliseu.c");
-            if (resultadoBusca != -1) {
-                printf("O arquivo foi encontrado no pendrive\n");
-                imprimirElementos(pendrive);
-            } else {
-                printf("O arquivo nao foi encontrado na lista\n");
-            }
-        }
+        printf("\n");
 
-        if (opcaoEscolhida == 4) {
-            int tipoRemocao;
-            printf("Desja remover por indice ou nome? ");
-            scanf("%d", &tipoRemocao);
-
-            if (tipoRemocao == 1) {
-                removerElemento(pendrive, 0);
-                printf("Elemento removido por indice");
-            }
-
-            if (tipoRemocao == 2) {
-                removerElementoNome(pendrive, "eliseu.c");
-                printf("Elemento removido por nome");
-            }
-        }
-
-        if (opcaoEscolhida == 5) {
-            atualizarElemento(pendrive, "exercicio1.c", "eliseu.exe", 123.3, 'E');
-        }
-
-    printf("\n");
-
-    printf("Escolha a operacao a ser realizada:\n1. Ver arquivos\n2. Inserir Arquivos\n3. Buscar Arquivos\n4. Excluir arquivo\n5. Atualizar elemento\n");
-    printf("Insira aqui: ");
-    scanf("%d", &opcaoEscolhida);
-    printf("\n");
+        printf("Escolha a operacao a ser realizada:\n1. Ver arquivos\n2. Inserir Arquivos\n3. Buscar Arquivos\n4. Excluir arquivo\n5. Atualizar elemento\n");
+        printf("Insira aqui: ");
+        scanf("%d", &opcaoEscolhida);
+        printf("\n");
     }
 }
     
