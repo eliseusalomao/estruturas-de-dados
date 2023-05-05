@@ -27,6 +27,7 @@ struct computador {
 };
 
 struct pendrive {
+    int id;
     char *nome;
     float tamanho;
     char *data;
@@ -75,6 +76,7 @@ int inserirElemento(Computador *pen_drive, char *nomeArquivo, float tamanhoArqui
     memoria->nome = nomeArquivo;
     memoria->tamanho = tamanhoArquivo;
     memoria->data = dataCriacao;
+    ++(memoria->id);
     memoria->prox = NULL;
 
     // se a lista (pen_drive) estiver vazia, a lista irá apontar para o espaço alocado para os campos de Pendrive
@@ -100,36 +102,59 @@ int inserirElemento(Computador *pen_drive, char *nomeArquivo, float tamanhoArqui
  * Descricao: função implementada para inserir elemento no inicio da lista
  */
 int inserirElementoInicio(Computador *pen_drive, char *nomeArquivo, float tamanhoArquivo, char *dataCriacao) {
-    Pendrive *nova = (Pendrive*)malloc(sizeof(Pendrive));
+    Pendrive *memoria = (Pendrive*)malloc(sizeof(Pendrive));
 
-    if (nova != NULL) {
-        nova->nome = nomeArquivo;
-        nova->tamanho = tamanhoArquivo;
-        nova->data = dataCriacao;
-        nova->prox = pen_drive->prim;
-        pen_drive->prim = nova;
+    if (memoria != NULL) {
+        memoria->nome = nomeArquivo;
+        memoria->tamanho = tamanhoArquivo;
+        memoria->data = dataCriacao;
+        ++(memoria->id);
+        memoria->prox = pen_drive->prim;
+        pen_drive->prim = memoria;
         return 1;
     }
     return 0;
 }
 
+/* Nome: inserirElementoInicioID
+ * Parametro: a própria lista, nomeArquivo, tamanhoArquivo, dataCriacao e ID de inserção       
+ * Retorno: retorna um inteiro indicando se a operação foi bem sucedida ou não
+ * Descricao: função implementada para inserir elementos no meio da lista
+ */
 int inserirElementoID(Computador *pen_drive, char *nomeArquivo, float tamanhoArquivo, char *dataCriacao, int ant) {
-    Pendrive *aux, *nova = (Pendrive*)malloc(sizeof(Pendrive));
+    Pendrive *aux, *p, *memoria = (Pendrive*)malloc(sizeof(Pendrive));
 
-    if (novo != NULL) [
-        nova->nome = nomeArquivo;
-        nova->tamanho = tamanhoArquivo;
-        nova->data = dataCriacao;
+    // se a memoria for alocada os campos do nó serão inseridos
+    if (memoria != NULL) {
+        memoria->nome = nomeArquivo;
+        memoria->tamanho = tamanhoArquivo;
+        memoria->data = dataCriacao;
+        ++(memoria->id);
+        // se a lista for nula está sendo inserido o primeiro nó da lista
         if (pen_drive->prim == NULL) {
-            nova->prox = NULL
-            pen_drive->prim = nova
-        } else {
-            aux = pen_drive->prim;
-            while (strcmp(aux->nome, ant)) {
-                
-            }
-        }
-    ]
+            //se é o primeiro, então o próximo será nulo
+            memoria->prox = NULL;
+            // o inicio da lista é o novo nó (memória)
+            pen_drive->prim = memoria;
+        } 
+
+        // pen_drive->prim não pode ser alterado, pois não estamos falando mais do primeiro nó
+        // se for alterado, o conteudo da variável na main será alterado e o valor perdido
+        // cria-se um auxiliar para guardar a referência do primeiro nó da lista
+        p = pen_drive->prim;
+        // vamos percorrer a lista até encontrar algum elemento correspondente; se encontrar iremos apontar
+        // para um elemento à frente na lista
+        /* while (aux->id != ant && aux->prox) {
+            aux = aux->prox;
+        } */
+
+        for (; p->id != ant && p->prox != NULL; p = p->prox);
+
+        // o novo no aponta para o final da lista
+        memoria->prox = p->prox;
+        p->prox = memoria;
+        return 1;
+    }
 }
 
 /* Nome: imprimirElementos
@@ -406,6 +431,7 @@ int main() {
                 inserirElemento(pen_drive, "eliseu.c", 23.3, "30/04/2023");
                 inserirElemento(pen_drive, "eliseu.exe", 23.3, "29/04/2023");
                 inserirElemento(pen_drive, "ED.c\t", 23.3, "28/04/2023");
+                inserirElementoID(pen_drive, "testeMeio.exe", 12.12, "05/05/2023", 3);
                 inserirElemento(pen_drive, "ED.exe\t", 23.3, "27/04/2023");
                 inserirElementoInicio(pen_drive, "teste.exe", 12.3, "04/05/2023");
                 break;
