@@ -7,12 +7,13 @@
 * Descrição: implementação de lista com vetor, com as      *
 *            operações de:  criar lista,                   *                   
 *                           inserir elemento,              *
-*                           inserir elemento início        *    
-*                           imprimir elentos,              *
+*                           inserir elemento início,       *    
+*                           inserir elemento id            *
+*                           listar elentos,                *
 *                           buscar elemento,               *
 *                           remover elemento,              *
+*                           remover elemento por nome,     *
 *                           tamanho,                       *
-*                           remover elemento por nome      *
 *                           atualizar elemento e           *     
 *                           excluir lista.                 *                                                  
 ***********************************************************/
@@ -107,7 +108,7 @@ int inserirElemento(Computador *pen_drive, char *nomeArquivo, float tamanhoArqui
 int inserirElementoInicio(Computador *pen_drive, char *nomeArquivo, float tamanhoArquivo, char *dataCriacao) {
     Pendrive *memoria = (Pendrive*)malloc(sizeof(Pendrive));
 
-    if (memoria != NULL) {
+    if (memoria) {
         memoria->nome = nomeArquivo;
         memoria->tamanho = tamanhoArquivo;
         memoria->data = dataCriacao;
@@ -420,12 +421,11 @@ int main() {
 
     int opcaoEscolhida;
 
-    printf("Escolha a operacao a ser realizada:\n1. Ver arquivos\n2. Inserir Arquivos\n3. Buscar Arquivos\n4. Excluir arquivo\n5. Atualizar elemento\n6. Saber quantidade de arquivos\n7. Excluir lista\n");
+    printf("Escolha a operacao a ser realizada:\n1. Ver arquivos\n2. Inserir arquivos\n3. Buscar arquivos\n4. Excluir arquivo\n5. Atualizar elemento\n6. Saber quantidade de arquivos\n7. Excluir lista\n");
     printf("Insira aqui: ");
     scanf("%d", &opcaoEscolhida);
-
+    fflush(stdin);
     while (opcaoEscolhida >= 1) {
-
         switch (opcaoEscolhida) {
             case 1:
                 listarElementos(pen_drive);
@@ -437,18 +437,71 @@ int main() {
                 printf("1. Inicio\n2. Final\n3. Por ID\n");
                 printf("Insira aqui: ");
                 scanf("%d", &opcaoInserir);
+                fflush(stdin);
                 switch (opcaoInserir) {
                 case 1: 
-                    inserirElementoInicio(pen_drive, "datastructures", 500.0, "05/05/2023");
+                    char nome[30], data[30];
+                    float tamanho;
+
+                    int repetir, pararRepetir = 0;
+                    printf("Quantos arquivos serão inseridos? ");
+                    scanf("%d", &repetir);
+                    fflush(stdin);
+                    do(repetir) {
+                        printf("Digite os dados que serão inseridos ");
+
+                        scanf("%s", nome);
+                        scanf("%f", &tamanho);
+                        fflush(stdin);
+                        scanf("%s", data);
+
+                        inserirElementoInicio(pen_drive, nome, tamanho, data);
+                        ++pararRepetir;
+                    } while (repetir > pararRepetir);
                     break;
                 case 2:
-                    inserirElemento(pen_drive, "eliseu.c", 23.3, "30/04/2023");
-                    inserirElemento(pen_drive, "eliseu.exe", 23.3, "29/04/2023");
-                    inserirElemento(pen_drive, "ED.c\t", 23.3, "28/04/2023");
-                    inserirElemento(pen_drive, "ED.exe\t", 23.3, "27/04/2023");
+                    char nome[30], data[30];
+                    float tamanho;
+
+                    int repetir, pararRepetir = 0;
+                    printf("Quantos arquivos serão inseridos? ");
+                    scanf("%d", &repetir);
+                    fflush(stdin);
+                    do(repetir) {
+                        printf("Digite os dados que serão inseridos ");
+
+                        scanf("%s", nome);
+                        scanf("%f", &tamanho);
+                        fflush(stdin);
+                        scanf("%s", data);
+
+                        inserirElemento(pen_drive, nome, tamanho, data);
+                        ++pararRepetir;
+                    } while (repetir > pararRepetir);
                     break;
                 case 3:
-                    inserirElementoID(pen_drive, "testeMeio.exe", 12.12, "05/05/2023", 3);
+                    char nome[30], data[30];
+                    float tamanho;
+                    int posicao;
+
+                    int repetir, pararRepetir = 0;
+                    printf("Quantos arquivos serão inseridos? ");
+                    scanf("%d", &repetir);
+                    fflush(stdin);
+                    do(repetir) {
+                        printf("Digite os dados que serão inseridos ");
+
+                        scanf("%s", nome);
+                        scanf("%f", &tamanho);
+                        fflush(stdin);
+                        scanf("%s", data);
+                        scanf("%d" &posicao);
+
+                        inserirElementoID(pen_drive, nome, tamanho, data, posicao);
+                        ++pararRepetir;
+                    } while (repetir > pararRepetir);
+                    break;
+                    
                     break;
                 default:
                     printf("Opcao nao valida\n");
@@ -499,7 +552,9 @@ int main() {
 
         printf("\n");
 
-        printf("Escolha a operacao a ser realizada:\n1. Ver arquivos\n2. Inserir Arquivos\n3. Buscar Arquivos\n4. Excluir arquivo\n5. Atualizar elemento\n6. Saber quantidade de arquivos\n7. Excluir lista\n");
+        fflush(stdin);
+
+        printf("Escolha a operacao a ser realizada:\n1. Ver arquivos\n2. Inserir arquivos\n3. Buscar arquivos\n4. Excluir arquivo\n5. Atualizar elemento\n6. Saber quantidade de arquivos\n7. Excluir lista\n");
         printf("Insira aqui: ");
         scanf("%d", &opcaoEscolhida);
     }
