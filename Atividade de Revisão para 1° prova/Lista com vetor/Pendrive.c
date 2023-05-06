@@ -1,7 +1,6 @@
 /***********************************************************
 * Nome: lista com vetores                                  *
 * Autor: Eliseu Salomão                                    *
-* Turma: 301B                                              *
 * Professor: Mayrton Dias                                  *
 * Disciplina: Estrutura de Dados                           *
 * Descrição: implementação de lista com vetor, com as      *
