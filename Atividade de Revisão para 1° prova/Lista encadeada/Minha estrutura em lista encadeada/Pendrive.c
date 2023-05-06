@@ -46,7 +46,6 @@ struct pendrive {
 Computador* criarLista() {
     // alocando espaço em memória para a estrutura Computador
     Computador *memoria = (Computador*)malloc(sizeof(Computador));
-
     // verificando se a lista foi criada
     if(memoria == NULL) {
         printf("A lista não foi criada\n");
@@ -79,6 +78,7 @@ int inserirElemento(Computador *pen_drive, char *nomeArquivo, float tamanhoArqui
     memoria->nome = nomeArquivo;
     memoria->tamanho = tamanhoArquivo;
     memoria->data = dataCriacao;
+    memoria->id = 0;
     ++(memoria->id);
     memoria->prox = NULL;
 
@@ -99,45 +99,42 @@ int inserirElemento(Computador *pen_drive, char *nomeArquivo, float tamanhoArqui
     return 1; 
 }
 
-/* Nome: inserirElementoInicioID
+/* Nome: inserirElementoID
  * Parametro: a própria lista, nomeArquivo, tamanhoArquivo, dataCriacao e ID de inserção       
  * Retorno: retorna um inteiro indicando se a operação foi bem sucedida ou não
  * Descricao: função implementada para inserir elementos no meio da lista por meio de um ID
  */
-int inserirElementoID(Computador *pen_drive, char *nomeArquivo, float tamanhoArquivo, char *dataCriacao, int ant) {
-    Pendrive *aux, *p, *memoria = (Pendrive*)malloc(sizeof(Pendrive));
+int inserirElementoID(Computador *pen_drive, char *nomeArquivo, float tamanhoArquivo, char *dataCriacao, int posicao) {
+    Pendrive *p, *memoria = (Pendrive*)malloc(sizeof(Pendrive));
 
-    // se a memoria for alocada os campos do nó serão inseridos
-    if (memoria != NULL) {
-        memoria->nome = nomeArquivo;
-        memoria->tamanho = tamanhoArquivo;
-        memoria->data = dataCriacao;
-        ++(memoria->id);
-        // se a lista for nula está sendo inserido o primeiro nó da lista
-        if (pen_drive->prim == NULL) {
-            //se é o primeiro, então o próximo será nulo
-            memoria->prox = NULL;
-            // o inicio da lista é o novo nó (memória)
-            pen_drive->prim = memoria;
-        } 
-
-        // pen_drive->prim não pode ser alterado, pois não estamos falando mais do primeiro nó
-        // se for alterado, o conteudo da variável na main será alterado e o valor perdido
-        // cria-se um auxiliar para guardar a referência do primeiro nó da lista
-        p = pen_drive->prim;
-        // vamos percorrer a lista até encontrar algum elemento correspondente; se encontrar iremos apontar
-        // para um elemento à frente na lista
-        /* while (aux->id != ant && aux->prox) {
-            aux = aux->prox;
-        } */
-
-        for (; p->id != ant && p->prox != NULL; p = p->prox);
-
-        // o novo no aponta para o final da lista
-        memoria->prox = p->prox;
-        p->prox = memoria;
-        return 1;
+    if (memoria == NULL) {
+        printf("A lista nao foi criada\n");
+        return 0;
     }
+
+    // inserindo dados nos campos da estrutura
+    memoria->nome = nomeArquivo;
+    memoria->tamanho = tamanhoArquivo;
+    memoria->data = dataCriacao;
+
+    p = pen_drive->prim;
+
+    int i = 2;
+    for (i; i < posicao; ++i) {
+        if (p == NULL) {
+            break;
+        }
+        p = p->prox;
+    }
+    if (p == NULL) {
+        printf("A posicao nao existe");
+        return 0;
+    }
+
+    memoria->prox = p->prox;
+    p->prox = memoria;
+
+    return 0;
 }
 
 /* Nome: inserirElementoInicio
@@ -148,7 +145,7 @@ int inserirElementoID(Computador *pen_drive, char *nomeArquivo, float tamanhoArq
 int inserirElementoInicio(Computador *pen_drive, char *nomeArquivo, float tamanhoArquivo, char *dataCriacao) {
     Pendrive *memoria = (Pendrive*)malloc(sizeof(Pendrive));
 
-    if (memoria) {
+    /*if (memoria) {
         memoria->nome = nomeArquivo;
         memoria->tamanho = tamanhoArquivo;
         memoria->data = dataCriacao;
@@ -156,7 +153,16 @@ int inserirElementoInicio(Computador *pen_drive, char *nomeArquivo, float tamanh
         memoria->prox = pen_drive->prim;
         pen_drive->prim = memoria;
         return 1;
-    }
+    }*/
+
+    memoria->nome = nomeArquivo;
+    memoria->tamanho = tamanhoArquivo;
+    memoria->data = dataCriacao;
+    ++(memoria->id);
+
+    memoria->prox = pen_drive->prim;
+    pen_drive->prim = memoria;
+
     return 0;
 }
 
@@ -299,7 +305,7 @@ int removerElementoNome(Computador *pen_drive, char *nome) {
  * Retorno: retorna um inteiro indicando se a operação foi bem sucedida ou não
  * Descricao: função implementada para atualizar elementos na lista
  */
-int atualizar(Computador *pen_drive, char *busca, char *dataAlteracao) {
+int atualizar(Computador *pen_drive, char *busca, char *nomeAlterado, float tamanhoAlterado, char *dataAlterada) {
     
     // verificando se a lista foi criada
     if (pen_drive == NULL) {
@@ -316,8 +322,10 @@ int atualizar(Computador *pen_drive, char *busca, char *dataAlteracao) {
     // percorrendo a lista verificando se alguma estrutura com o campo de data corresponde ao valor passado por busca
     Pendrive *p;
     for (p = pen_drive->prim; p != NULL; p = p->prox) {
-        if (strcmp(p->data, busca) == 0) {
-            p->data = dataAlteracao;
+        if (strcmp(p->nome, busca) == 0) {
+            p->nome = nomeAlterado;
+            p->tamanho = tamanhoAlterado;
+            p->data = dataAlterada;
             printf("O arquivo foi atualizado\n");
             listarElementos(pen_drive);
         }
@@ -331,7 +339,7 @@ int atualizar(Computador *pen_drive, char *busca, char *dataAlteracao) {
  * Retorno: retorna um endereço que corresponde a um elemento da lista
  * Descricao: função implementada para buscar elementos na lista
  */
-Pendrive* buscarElemento(Computador *pen_drive, char *data) {
+Pendrive* buscarElemento(Computador *pen_drive, char *nomeBusca) {
     
     // verificando se a lista (pen_drive) foi criada
     if (pen_drive == NULL) {
@@ -348,7 +356,7 @@ Pendrive* buscarElemento(Computador *pen_drive, char *data) {
     // percorrendo a lista com p e verificando se algum campo data corresponde ao valor passando de data
     Pendrive *p;
     for(p = pen_drive->prim; p->prox != NULL; p = p->prox) {
-        if(strcmp(p->data, data) == 0) {
+        if(strcmp(p->nome, nomeBusca) == 0) {
             // retornando o elemento correspondente
             return p;
         }
@@ -373,7 +381,7 @@ int tamanho(Computador *pen_drive) {
 
     // verificando se a lista está vazia
     if (pen_drive->prim == NULL) {
-        printf("A lista esta vazia\nNumero de elementos: 0");
+        printf("A lista esta vazia\n");
         return 0;
     }
 
@@ -425,6 +433,7 @@ int main() {
     scanf("%d", &opcaoEscolhida);
     fflush(stdin);
     while (opcaoEscolhida >= 1) {
+        printf("\n");
         switch (opcaoEscolhida) {
             case 1:
                 listarElementos(pen_drive);
@@ -447,11 +456,14 @@ int main() {
                     scanf("%d", &repetir1);
                     fflush(stdin);
                     do {
-                        printf("Digite os dados que serão inseridos ");
+                        printf("Digite os dados que serão inseridos: \n");
 
+                        printf("Nome do arquivo: ");
                         scanf("%s", nomeArquivoInserir1);
+                        printf("Tamanho do arquivo: ");
                         scanf("%f", &tamanhoInserir1);
                         fflush(stdin);
+                        printf("Data de criação: ");
                         scanf("%s", dataArquivoInserir1);
 
                         inserirElementoInicio(pen_drive, nomeArquivoInserir1, tamanhoInserir1, dataArquivoInserir1);
@@ -469,9 +481,12 @@ int main() {
                     do {
                         printf("Digite os dados que serão inseridos ");
 
+                        printf("Nome do arquivo: ");
                         scanf("%s", nomeArquivoInserir2);
+                        printf("Tamanho do arquivo: ");
                         scanf("%f", &tamanhoInserir2);
                         fflush(stdin);
+                        printf("Data de criação: ");
                         scanf("%s", dataArquivoInserir2);
 
                         inserirElemento(pen_drive, nomeArquivoInserir2, tamanhoInserir2, dataArquivoInserir2);
@@ -490,10 +505,14 @@ int main() {
                     do {
                         printf("Digite os dados que serão inseridos ");
 
+                        printf("Nome do arquivo: ");
                         scanf("%s", nomeArquivoInserir3);
+                        printf("Tamanho do arquivo: ");
                         scanf("%f", &tamanhoInserir3);
                         fflush(stdin);
+                        printf("Data de criação: ");
                         scanf("%s", dataArquivoInserir3);
+                        printf("Posição que deseja inserir: ");
                         scanf("%d", &posicao);
 
                         inserirElementoID(pen_drive, nomeArquivoInserir3, tamanhoInserir3, dataArquivoInserir3, posicao);
@@ -508,7 +527,7 @@ int main() {
             case 3:
                 char busca[30];
 
-                printf("Digite a data do arquivo que deseja buscar: ");
+                printf("Digite o nome do arquivo que deseja buscar: ");
                 scanf("%s", &busca);
 
                 Pendrive *ResultadoBusca = buscarElemento(pen_drive, busca);
@@ -521,7 +540,7 @@ int main() {
             case 4:
                 int opcaoRemover;
 
-                printf("Deseja remover por nome ou data?");
+                printf("Deseja remover por nome ou data?\n");
                 printf("1. Por nome\n2. Por data\n");
                 printf("Insira aqui: ");
                 scanf("%d", &opcaoRemover);
@@ -535,6 +554,7 @@ int main() {
                         break;
                     case 2:
                         char dataArquivoRemover[30];
+                        printf("CUIDADO! Todos os arquivos que forem compatíveis serão deletados!");
                         printf("Digite a data do arquivo que deseja remover: ");
                         scanf("%s", dataArquivoRemover);
 
@@ -546,17 +566,25 @@ int main() {
                 }
                 break;
             case 5:
-                char dataArquivoAtual[30], dataArquivoAtualizada[30];
-                printf("Digite a data do arquivo que deseja atualizar: ");
-                scanf("%s", dataArquivoAtual);
-                printf("Insira a nova data: ");
+                char nomeArquivoAtual[30], nomeArquivoAtualizado[30], dataArquivoAtualizada[30];
+                float tamanhoArquivoAtualizado;
+
+                printf("Digite o nome do arquivo que deseja atualizar: ");
+                printf("Nome do arquivo que deseja atualizar: ");
+                scanf("%s", nomeArquivoAtual);
+                printf("Insira os novos dados: \n");
+                printf("Novo nome: ");
+                scanf("%s", nomeArquivoAtualizado);
+                printf("Novo tamanho: ");
+                scanf("%f", &tamanhoArquivoAtualizado);
+                printf("Nova data: ");
                 scanf("%s", dataArquivoAtualizada);
 
-                atualizar(pen_drive, dataArquivoAtual, dataArquivoAtualizada);
+                atualizar(pen_drive, nomeArquivoAtual, nomeArquivoAtualizado, tamanhoArquivoAtualizado, dataArquivoAtualizada);
                 break;
             case 6:
                 int tamanhoPendrive = tamanho(pen_drive);
-                printf("A quantidade de arquivos no pendrive é de: %d", tamanhoPendrive);
+                printf("A quantidade de arquivos no pendrive é de: %d\n", tamanhoPendrive);
                 break;
             case 7:
                 excluirLista(pen_drive);
