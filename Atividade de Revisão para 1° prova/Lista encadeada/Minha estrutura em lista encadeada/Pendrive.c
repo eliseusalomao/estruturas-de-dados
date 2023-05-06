@@ -6,14 +6,14 @@
 * Descrição: implementação de lista com vetor, com as      *
 *            operações de:  criar lista,                   *                   
 *                           inserir elemento,              *
-*                           inserir elemento início,       *    
-*                           inserir elemento id            *
+*                           inserir elemento id,           *    
+*                           inserir elemento inicio,       *
 *                           listar elentos,                *
-*                           buscar elemento,               *
 *                           remover elemento,              *
-*                           remover elemento por nome,     *
-*                           tamanho,                       *
-*                           atualizar elemento e           *     
+*                           remover elemento nome,         *
+*                           atualizar,                     *
+*                           buscar elemento,               *
+*                           tamanho e                      *     
 *                           excluir lista.                 *                                                  
 ***********************************************************/
 
@@ -99,26 +99,6 @@ int inserirElemento(Computador *pen_drive, char *nomeArquivo, float tamanhoArqui
     return 1; 
 }
 
-/* Nome: inserirElementoInicio
- * Parametro: a própria lista, nomeArquivo, tamanhoArquivo e dataCriacao        
- * Retorno: retorna um inteiro indicando se a operação foi bem sucedida ou não
- * Descricao: função implementada para inserir elemento no inicio da lista
- */
-int inserirElementoInicio(Computador *pen_drive, char *nomeArquivo, float tamanhoArquivo, char *dataCriacao) {
-    Pendrive *memoria = (Pendrive*)malloc(sizeof(Pendrive));
-
-    if (memoria) {
-        memoria->nome = nomeArquivo;
-        memoria->tamanho = tamanhoArquivo;
-        memoria->data = dataCriacao;
-        ++(memoria->id);
-        memoria->prox = pen_drive->prim;
-        pen_drive->prim = memoria;
-        return 1;
-    }
-    return 0;
-}
-
 /* Nome: inserirElementoInicioID
  * Parametro: a própria lista, nomeArquivo, tamanhoArquivo, dataCriacao e ID de inserção       
  * Retorno: retorna um inteiro indicando se a operação foi bem sucedida ou não
@@ -160,7 +140,27 @@ int inserirElementoID(Computador *pen_drive, char *nomeArquivo, float tamanhoArq
     }
 }
 
-/* Nome: imprimirElementos
+/* Nome: inserirElementoInicio
+ * Parametro: a própria lista, nomeArquivo, tamanhoArquivo e dataCriacao        
+ * Retorno: retorna um inteiro indicando se a operação foi bem sucedida ou não
+ * Descricao: função implementada para inserir elemento no inicio da lista
+ */
+int inserirElementoInicio(Computador *pen_drive, char *nomeArquivo, float tamanhoArquivo, char *dataCriacao) {
+    Pendrive *memoria = (Pendrive*)malloc(sizeof(Pendrive));
+
+    if (memoria) {
+        memoria->nome = nomeArquivo;
+        memoria->tamanho = tamanhoArquivo;
+        memoria->data = dataCriacao;
+        ++(memoria->id);
+        memoria->prox = pen_drive->prim;
+        pen_drive->prim = memoria;
+        return 1;
+    }
+    return 0;
+}
+
+/* Nome: listarElementos
  * Parametro: a própria lista     
  * Retorno: retorna void, é um procedimento para imprimir elementos no prompt
  * Descricao: função implementada para imprimir elementos da lista
@@ -186,90 +186,6 @@ void listarElementos(Computador *pen_drive) {
         printf("%s\t\t%.2f\t\t%s\n", p->nome, p->tamanho, p->data);
     }
     printf("\n");
-}
-
-/* Nome: buscarElemento
- * Parametro: a própria lista e data     
- * Retorno: retorna um endereço que corresponde a um elemento da lista
- * Descricao: função implementada para buscar elementos na lista
- */
-Pendrive* buscarElemento(Computador *pen_drive, char *data) {
-    
-    // verificando se a lista (pen_drive) foi criada
-    if (pen_drive == NULL) {
-        printf("A lista nao foi criada\n");
-        return 0;
-    }
-
-    //  verificando se a lista não está vazia
-    if (pen_drive->prim == NULL) {
-        printf("A lista esta vazia\n");
-        return 0;
-    }
-
-    // percorrendo a lista com p e verificando se algum campo data corresponde ao valor passando de data
-    Pendrive *p;
-    for(p = pen_drive->prim; p->prox != NULL; p = p->prox) {
-        if(strcmp(p->data, data) == 0) {
-            // retornando o elemento correspondente
-            return p;
-        }
-    }
-
-    return NULL;
-}
-
-/* Nome: removerElementoNome
- * Parametro: a própria lista e um nome
- * Retorno: retorna um inteiro indicando se a operação foi bem sucedida ou não
- * Descricao: função implementada para remover elementos da lista por nome do elemento
- */
-int removerElementoNome(Computador *pen_drive, char *nome) {
-    
-    // verificando se a lista foi criada
-    if (pen_drive == NULL) {
-        printf("A lista nao foi criada\n");
-        return 0;
-    }
-
-    // verificando se a lista possui elemento
-    if (pen_drive->prim == NULL) {
-        printf("A lista esta vazia\n");
-        return 0;
-    }
-
-    // verificando o primeiro elemento corresponde ao elemento passado
-    Pendrive *p, *aux;
-    if (strcmp(pen_drive->prim->nome, nome) == 0) {
-        p = pen_drive->prim;
-        pen_drive->prim = pen_drive->prim->prox;
-        printf("Removendo do inicio.\n");
-        listarElementos(pen_drive);
-        free(p);
-        return 1;
-    }
-
-    // percorrendo a lista entre e incluindo o segundo até o penúltimo elemento
-    for (p = pen_drive->prim; p->prox != NULL; p = p->prox) {
-        if (strcmp(p->prox->nome, nome) == 0) {
-            aux = p->prox;
-            p->prox = p->prox->prox;
-            printf("Removendo do meio\n");
-            listarElementos(pen_drive);
-            free(aux);
-            return 1;
-        }
-    }
-
-    // verificando se o último elemento corresponde ao valor passado
-    if (strcmp(p->prox->nome, nome) == 0) {
-        aux = p->prox;
-        p->prox = NULL;
-        printf("Removendo ultimo elemento\n");
-        listarElementos(pen_drive);
-        free(aux);
-        return 1;
-    }
 }
 
 /* Nome: removerElemento
@@ -325,7 +241,60 @@ int removerElemento(Computador *pen_drive, char *data) {
     }
 }
 
-/* Nome: atualizarElemento
+/* Nome: removerElementoNome
+ * Parametro: a própria lista e um nome
+ * Retorno: retorna um inteiro indicando se a operação foi bem sucedida ou não
+ * Descricao: função implementada para remover elementos da lista por nome do elemento
+ */
+int removerElementoNome(Computador *pen_drive, char *nome) {
+    
+    // verificando se a lista foi criada
+    if (pen_drive == NULL) {
+        printf("A lista nao foi criada\n");
+        return 0;
+    }
+
+    // verificando se a lista possui elemento
+    if (pen_drive->prim == NULL) {
+        printf("A lista esta vazia\n");
+        return 0;
+    }
+
+    // verificando o primeiro elemento corresponde ao elemento passado
+    Pendrive *p, *aux;
+    if (strcmp(pen_drive->prim->nome, nome) == 0) {
+        p = pen_drive->prim;
+        pen_drive->prim = pen_drive->prim->prox;
+        printf("Removendo do inicio.\n");
+        listarElementos(pen_drive);
+        free(p);
+        return 1;
+    }
+
+    // percorrendo a lista entre e incluindo o segundo até o penúltimo elemento
+    for (p = pen_drive->prim; p->prox != NULL; p = p->prox) {
+        if (strcmp(p->prox->nome, nome) == 0) {
+            aux = p->prox;
+            p->prox = p->prox->prox;
+            printf("Removendo do meio\n");
+            listarElementos(pen_drive);
+            free(aux);
+            return 1;
+        }
+    }
+
+    // verificando se o último elemento corresponde ao valor passado
+    if (strcmp(p->prox->nome, nome) == 0) {
+        aux = p->prox;
+        p->prox = NULL;
+        printf("Removendo ultimo elemento\n");
+        listarElementos(pen_drive);
+        free(aux);
+        return 1;
+    }
+}
+
+/* Nome: atualizar
  * Parametro: a própria lista, busca e dataAlteracao     
  * Retorno: retorna um inteiro indicando se a operação foi bem sucedida ou não
  * Descricao: função implementada para atualizar elementos na lista
@@ -355,6 +324,37 @@ int atualizar(Computador *pen_drive, char *busca, char *dataAlteracao) {
     }
 
     return 0;
+}
+
+/* Nome: buscarElemento
+ * Parametro: a própria lista e data     
+ * Retorno: retorna um endereço que corresponde a um elemento da lista
+ * Descricao: função implementada para buscar elementos na lista
+ */
+Pendrive* buscarElemento(Computador *pen_drive, char *data) {
+    
+    // verificando se a lista (pen_drive) foi criada
+    if (pen_drive == NULL) {
+        printf("A lista nao foi criada\n");
+        return 0;
+    }
+
+    //  verificando se a lista não está vazia
+    if (pen_drive->prim == NULL) {
+        printf("A lista esta vazia\n");
+        return 0;
+    }
+
+    // percorrendo a lista com p e verificando se algum campo data corresponde ao valor passando de data
+    Pendrive *p;
+    for(p = pen_drive->prim; p->prox != NULL; p = p->prox) {
+        if(strcmp(p->data, data) == 0) {
+            // retornando o elemento correspondente
+            return p;
+        }
+    }
+
+    return NULL;
 }
 
 /* Nome: tamanho
