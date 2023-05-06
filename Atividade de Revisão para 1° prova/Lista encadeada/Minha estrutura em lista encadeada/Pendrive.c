@@ -184,7 +184,7 @@ void listarElementos(Computador *pen_drive) {
     Pendrive *p;
     printf("Nome\t\tTamanho\t\tData\t\n");
     for (p = pen_drive->prim; p != NULL; p = p->prox) {
-        printf("%s\t%.2f\t\t%s\n", p->nome, p->tamanho, p->data);
+        printf("%s\t\t%.2f\t\t%s\n", p->nome, p->tamanho, p->data);
     }
     printf("\n");
 }
@@ -440,68 +440,66 @@ int main() {
                 fflush(stdin);
                 switch (opcaoInserir) {
                 case 1: 
-                    char nome[30], data[30];
-                    float tamanho;
+                    char nomeArquivoInserir1[30], dataArquivoInserir1[30];
+                    float tamanhoInserir1;
 
-                    int repetir, pararRepetir = 0;
+                    int repetir1, pararRepetir1 = 0;
                     printf("Quantos arquivos serão inseridos? ");
-                    scanf("%d", &repetir);
+                    scanf("%d", &repetir1);
                     fflush(stdin);
-                    do(repetir) {
+                    do {
                         printf("Digite os dados que serão inseridos ");
 
-                        scanf("%s", nome);
-                        scanf("%f", &tamanho);
+                        scanf("%s", nomeArquivoInserir1);
+                        scanf("%f", &tamanhoInserir1);
                         fflush(stdin);
-                        scanf("%s", data);
+                        scanf("%s", dataArquivoInserir1);
 
-                        inserirElementoInicio(pen_drive, nome, tamanho, data);
-                        ++pararRepetir;
-                    } while (repetir > pararRepetir);
+                        inserirElementoInicio(pen_drive, nomeArquivoInserir1, tamanhoInserir1, dataArquivoInserir1);
+                        ++pararRepetir1;
+                    } while (repetir1 > pararRepetir1);
                     break;
                 case 2:
-                    char nome[30], data[30];
-                    float tamanho;
+                    char nomeArquivoInserir2[30], dataArquivoInserir2[30];
+                    float tamanhoInserir2;
 
-                    int repetir, pararRepetir = 0;
+                    int repetir2, pararRepetir2 = 0;
                     printf("Quantos arquivos serão inseridos? ");
-                    scanf("%d", &repetir);
+                    scanf("%d", &repetir2);
                     fflush(stdin);
-                    do(repetir) {
+                    do {
                         printf("Digite os dados que serão inseridos ");
 
-                        scanf("%s", nome);
-                        scanf("%f", &tamanho);
+                        scanf("%s", nomeArquivoInserir2);
+                        scanf("%f", &tamanhoInserir2);
                         fflush(stdin);
-                        scanf("%s", data);
+                        scanf("%s", dataArquivoInserir2);
 
-                        inserirElemento(pen_drive, nome, tamanho, data);
-                        ++pararRepetir;
-                    } while (repetir > pararRepetir);
+                        inserirElemento(pen_drive, nomeArquivoInserir2, tamanhoInserir2, dataArquivoInserir2);
+                        ++pararRepetir2;
+                    } while (repetir2 > pararRepetir2);
                     break;
                 case 3:
-                    char nome[30], data[30];
-                    float tamanho;
+                    char nomeArquivoInserir3[30], dataArquivoInserir3[30];
+                    float tamanhoInserir3;
                     int posicao;
 
-                    int repetir, pararRepetir = 0;
+                    int repetir3, pararRepetir3 = 0;
                     printf("Quantos arquivos serão inseridos? ");
-                    scanf("%d", &repetir);
+                    scanf("%d", &repetir3);
                     fflush(stdin);
-                    do(repetir) {
+                    do {
                         printf("Digite os dados que serão inseridos ");
 
-                        scanf("%s", nome);
-                        scanf("%f", &tamanho);
+                        scanf("%s", nomeArquivoInserir3);
+                        scanf("%f", &tamanhoInserir3);
                         fflush(stdin);
-                        scanf("%s", data);
-                        scanf("%d" &posicao);
+                        scanf("%s", dataArquivoInserir3);
+                        scanf("%d", &posicao);
 
-                        inserirElementoID(pen_drive, nome, tamanho, data, posicao);
-                        ++pararRepetir;
-                    } while (repetir > pararRepetir);
-                    break;
-                    
+                        inserirElementoID(pen_drive, nomeArquivoInserir3, tamanhoInserir3, dataArquivoInserir3, posicao);
+                        ++pararRepetir3;
+                    } while (repetir3 > pararRepetir3);
                     break;
                 default:
                     printf("Opcao nao valida\n");
@@ -509,8 +507,13 @@ int main() {
                 }
                 break;
             case 3:
-                Pendrive *buscar = buscarElemento(pen_drive, "28/04/2023");
-                    if (buscar != NULL) {
+                char busca[30];
+
+                printf("Digite a data do arquivo que deseja buscar: ");
+                scanf("%s", &busca);
+
+                Pendrive *ResultadoBusca = buscarElemento(pen_drive, busca);
+                    if (ResultadoBusca != NULL) {
                         printf("Elemento encontrado\n");
                     } else {
                         printf("O elemento não foi encontrado\n");
@@ -525,10 +528,18 @@ int main() {
                 scanf("%d", &opcaoRemover);
                 switch (opcaoRemover) {
                     case 1:
-                        removerElementoNome(pen_drive, "ED.exe\t");
+                        char nomeArquivoRemover[30];
+                        printf("Digite o nome do arquivo: ");
+                        scanf("%s", nomeArquivoRemover);
+                        
+                        removerElementoNome(pen_drive, nomeArquivoRemover);
                         break;
                     case 2:
-                        removerElemento(pen_drive, "27/04/2023");
+                        char dataArquivoRemover[30];
+                        printf("Digite a data do arquivo que deseja remover: ");
+                        scanf("%s", dataArquivoRemover);
+
+                        removerElemento(pen_drive, dataArquivoRemover);
                         break;
                     default:
                         printf("Opcao invalida\n");
@@ -536,7 +547,13 @@ int main() {
                 }
                 break;
             case 5:
-                atualizar(pen_drive, "30/04/2023", "04/05/2023");
+                char dataArquivoAtual[30], dataArquivoAtualizada[30];
+                printf("Digite a data do arquivo que deseja atualizar: ");
+                scanf("%s", dataArquivoAtual);
+                printf("Insira a nova data: ");
+                scanf("%s", dataArquivoAtualizada);
+
+                atualizar(pen_drive, dataArquivoAtual, dataArquivoAtualizada);
                 break;
             case 6:
                 int tamanhoPendrive = tamanho(pen_drive);
