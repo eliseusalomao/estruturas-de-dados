@@ -74,10 +74,13 @@ int inserirElemento(Computador *pen_drive, char *nomeArquivo, float tamanhoArqui
         return 0;
     }
 
+    // alocando memoria para receber copias das strings
+    memoria->nome = malloc(strlen(nomeArquivo) + 1);
+    memoria->data = malloc(strlen(dataCriacao) + 1);
     // iniciando os campos da estrutura Pendrive através do espaço alocado memoria com os valores passados como parâmetros
-    memoria->nome = nomeArquivo;
+    strcpy(memoria->nome, nomeArquivo);
     memoria->tamanho = tamanhoArquivo;
-    memoria->data = dataCriacao;
+    strcpy(memoria->data, dataCriacao);
     memoria->id = 0;
     ++(memoria->id);
     memoria->prox = NULL;
@@ -112,10 +115,15 @@ int inserirElementoID(Computador *pen_drive, char *nomeArquivo, float tamanhoArq
         return 0;
     }
 
+    // alocando memoria para receber copias das strings
+    memoria->nome = malloc(strlen(nomeArquivo) + 1);
+    memoria->data = malloc(strlen(dataCriacao) + 1);
+
     // inserindo dados nos campos da estrutura
-    memoria->nome = nomeArquivo;
+    strcpy(memoria->nome, nomeArquivo);
     memoria->tamanho = tamanhoArquivo;
-    memoria->data = dataCriacao;
+    strcpy(memoria->data, dataCriacao);
+    ++(memoria->id);
 
     p = pen_drive->prim;
 
@@ -155,9 +163,13 @@ int inserirElementoInicio(Computador *pen_drive, char *nomeArquivo, float tamanh
         return 1;
     }*/
 
-    memoria->nome = nomeArquivo;
+    // alocando memoria para receber copias das strings
+    memoria->nome = malloc(strlen(nomeArquivo) + 1);
+    memoria->data = malloc(strlen(dataCriacao) + 1);
+
+    strcpy(memoria->nome, nomeArquivo);
     memoria->tamanho = tamanhoArquivo;
-    memoria->data = dataCriacao;
+    strcpy(memoria->data, dataCriacao);
     ++(memoria->id);
 
     memoria->prox = pen_drive->prim;
@@ -406,6 +418,9 @@ Computador* excluirLista(Computador *pen_drive) {
     while (pen_drive->prim != NULL) {
         // aux irá guardar a referencia que prim aponta
         aux = pen_drive->prim;
+        // liberando espaço alocado para as strings
+        free(aux->nome);
+        free(aux->data);
         // prim vai apontar para o próximo elemento
         pen_drive->prim = pen_drive->prim->prox;
         // aux vai ser desalocado da memória
