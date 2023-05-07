@@ -96,7 +96,7 @@ int inserirElemento(Computador *pen_drive, char *nomeArquivo, float tamanhoArqui
     Pendrive *p;
     for (p = pen_drive->prim; p->prox != NULL; p = p->prox);
 
-    // assim, o último elemento (p->prox) aponta para o espaço alocado para Pendrive
+    // assim, o último elemento (p->prox) aponta para o espaço alocado para Pendrive; assim o inicio da lista passa a ser o último nó
     p->prox = memoria;
 
     return 1; 
@@ -110,6 +110,7 @@ int inserirElemento(Computador *pen_drive, char *nomeArquivo, float tamanhoArqui
 int inserirElementoID(Computador *pen_drive, char *nomeArquivo, float tamanhoArquivo, char *dataCriacao, int posicao) {
     Pendrive *p, *memoria = (Pendrive*)malloc(sizeof(Pendrive));
 
+    // verificando se a lista foi criada
     if (memoria == NULL) {
         printf("A lista nao foi criada\n");
         return 0;
@@ -125,21 +126,32 @@ int inserirElementoID(Computador *pen_drive, char *nomeArquivo, float tamanhoArq
     strcpy(memoria->data, dataCriacao);
     ++(memoria->id);
 
+    // p aponta para o primeiro no
     p = pen_drive->prim;
 
     int i = 2;
-    for (i; i < posicao; ++i) {
+    
+    // o laço de repetição ira percorrer entre 2 até posição-1 enquanto p for diferente de nulo
+    /*for (i; i < posicao; ++i) {
+        // irá verificar se o próximo nó é nulo, caso verdadeiro, sai do laço
         if (p == NULL) {
             break;
         }
+        // caso contrário p irá apontar para o próximo nó
         p = p->prox;
-    }
+    }*/
+
+    for (i; (i < posicao) && (p != NULL); ++i, p = p->prox);
+
+    // se p (p->prox) for nulo significa que é uma posição que não existe
     if (p == NULL) {
         printf("A posicao nao existe");
         return 0;
     }
 
+    // memoria->prox irá apontar para o novo elemento inserido (p->prox)
     memoria->prox = p->prox;
+    // e p->prox (o último elemento inserido) irá apontar de volta para o espaço alocado para Pendrive; assim o inicio da lista passa a ser o último nó
     p->prox = memoria;
 
     return 0;
@@ -153,29 +165,27 @@ int inserirElementoID(Computador *pen_drive, char *nomeArquivo, float tamanhoArq
 int inserirElementoInicio(Computador *pen_drive, char *nomeArquivo, float tamanhoArquivo, char *dataCriacao) {
     Pendrive *memoria = (Pendrive*)malloc(sizeof(Pendrive));
 
-    /*if (memoria) {
-        memoria->nome = nomeArquivo;
-        memoria->tamanho = tamanhoArquivo;
-        memoria->data = dataCriacao;
-        ++(memoria->id);
-        memoria->prox = pen_drive->prim;
-        pen_drive->prim = memoria;
-        return 1;
-    }*/
+    if (memoria == NULL) {
+        printf("A lista nao foi criada\n");
+        return 0;
+    }
 
     // alocando memoria para receber copias das strings
     memoria->nome = malloc(strlen(nomeArquivo) + 1);
     memoria->data = malloc(strlen(dataCriacao) + 1);
 
+    // inserindo dado nos campos da estrutura
     strcpy(memoria->nome, nomeArquivo);
     memoria->tamanho = tamanhoArquivo;
     strcpy(memoria->data, dataCriacao);
     ++(memoria->id);
 
+    // o espaço alocado para Pendrive irá apontar para o primeiro nó
     memoria->prox = pen_drive->prim;
+    // o primeiro nó irá apontar para o espaço alocado para Pendrive; assim o inicio da lista passa a ser o último nó
     pen_drive->prim = memoria;
 
-    return 0;
+    return 1;
 }
 
 /* Nome: listarElementos
@@ -418,7 +428,7 @@ Computador* excluirLista(Computador *pen_drive) {
     while (pen_drive->prim != NULL) {
         // aux irá guardar a referencia que prim aponta
         aux = pen_drive->prim;
-        // liberando espaço alocado para as strings
+        // liberando espaço alocado para a copia das strings
         free(aux->nome);
         free(aux->data);
         // prim vai apontar para o próximo elemento
