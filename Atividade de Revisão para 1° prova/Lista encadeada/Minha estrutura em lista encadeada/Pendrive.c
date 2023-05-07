@@ -377,7 +377,7 @@ Pendrive* buscarElemento(Computador *pen_drive, char *nomeBusca) {
 
     // percorrendo a lista com p e verificando se algum campo data corresponde ao valor passando de data
     Pendrive *p;
-    for(p = pen_drive->prim; p->prox != NULL; p = p->prox) {
+    for(p = pen_drive->prim; p != NULL; p = p->prox) {
         if(strcmp(p->nome, nomeBusca) == 0) {
             // retornando o elemento correspondente
             return p;
@@ -481,7 +481,7 @@ int main() {
                     scanf("%d", &repetir1);
                     fflush(stdin);
                     do {
-                        printf("Digite os dados que serão inseridos: \n");
+                        printf("Digite os dados que serão inseridos\n");
 
                         printf("Nome do arquivo: ");
                         scanf("%s", nomeArquivoInserir1);
@@ -504,7 +504,7 @@ int main() {
                     scanf("%d", &repetir2);
                     fflush(stdin);
                     do {
-                        printf("Digite os dados que serão inseridos ");
+                        printf("Digite os dados que serão inseridos\n");
 
                         printf("Nome do arquivo: ");
                         scanf("%s", nomeArquivoInserir2);
@@ -528,7 +528,7 @@ int main() {
                     scanf("%d", &repetir3);
                     fflush(stdin);
                     do {
-                        printf("Digite os dados que serão inseridos ");
+                        printf("Digite os dados que serão inseridos\n ");
 
                         printf("Nome do arquivo: ");
                         scanf("%s", nomeArquivoInserir3);
@@ -553,7 +553,7 @@ int main() {
                 char busca[30];
 
                 printf("Digite o nome do arquivo que deseja buscar: ");
-                scanf("%s", &busca);
+                scanf("%s", busca);
 
                 Pendrive *ResultadoBusca = buscarElemento(pen_drive, busca);
                     if (ResultadoBusca != NULL) {

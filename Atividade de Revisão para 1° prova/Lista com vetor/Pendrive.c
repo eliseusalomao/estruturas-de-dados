@@ -29,7 +29,7 @@
 typedef struct {
     char nomeArquivo[30];
     float tamanhoArquivo;
-    char particao;
+    char data[30];
 } Pendrive;
 
 typedef struct {
@@ -64,7 +64,7 @@ Lista* criarLista() {
  * Retorno: o tipo de retorno é um inteiro
  * Descricao: função que insere elementos na última posição do vetor
  */
-int inserirElemento(Lista *lista, char *nome, float tamanho, char particao) {
+int inserirElemento(Lista *lista, char *nome, float tamanho, char *dataCriacao) {
     // verificando se a lista está vazia
     if(lista == NULL) {
         printf("A lista nao foi criada");
@@ -76,7 +76,7 @@ int inserirElemento(Lista *lista, char *nome, float tamanho, char particao) {
     if(lista->id<TAM) {
         strcpy(lista->elementos[lista->id].nomeArquivo, nome);
         lista->elementos[lista->id].tamanhoArquivo = tamanho;
-        lista->elementos[lista->id].particao = particao;
+        strcpy(lista->elementos[lista->id].data, dataCriacao);
         ++(lista->id);
     } else {
         printf("Espaco esgotado\n");
@@ -90,7 +90,7 @@ int inserirElemento(Lista *lista, char *nome, float tamanho, char particao) {
  * Retorno: o tipo de retorno é um inteiro
  * Descricao: função que insere elementos no vetor na posição especificada pelo usuário/programador
  */
-int inserirElementoID(Lista *lista, char *nome, float tamanho, char particao, int posicao) {
+int inserirElementoID(Lista *lista, char *nome, float tamanho, char *dataCriacao, int posicao) {
     int i;
 
     // verificando se a lista foi criada
@@ -109,12 +109,12 @@ int inserirElementoID(Lista *lista, char *nome, float tamanho, char particao, in
             for (i = lista->id; i > posicao; --i) {
                 strcpy(lista->elementos[i].nomeArquivo, lista->elementos[i-1].nomeArquivo);
                 lista->elementos[i].tamanhoArquivo = lista->elementos[i-1].tamanhoArquivo;
-                lista->elementos[i].particao = lista->elementos[i-1].particao;
+                strcpy(lista->elementos[i].data, lista->elementos[i-1].data);
             }
             // inserindo elemento na posição desejada, já que o espaço foi liberado
             strcpy(lista->elementos[posicao].nomeArquivo, nome);
             lista->elementos[posicao].tamanhoArquivo = tamanho;
-            lista->elementos[posicao].particao = particao;
+            strcpy(lista->elementos[posicao].data, dataCriacao);
             ++(lista->id);
         } else {
             printf("Posicao fora do intervalo definido\n");
@@ -131,7 +131,7 @@ int inserirElementoID(Lista *lista, char *nome, float tamanho, char particao, in
  * Retorno: o tipo de retorno é um inteiro
  * Descricao: função que insere elementos na primeira posição do vetor
  */
-int inserirElementoInicio(Lista *lista, char *nome, float tamanho, char particao) {
+int inserirElementoInicio(Lista *lista, char *nome, float tamanho, char *dataCriacao) {
     int i;
     // verificando se a lista foi criada
     if (lista == NULL) {
@@ -145,12 +145,12 @@ int inserirElementoInicio(Lista *lista, char *nome, float tamanho, char particao
         for (i = lista->id; i > 0; --i) {
             strcpy(lista->elementos[i].nomeArquivo, lista->elementos[i-1].nomeArquivo);
             lista->elementos[i].tamanhoArquivo = lista->elementos[i-1].tamanhoArquivo;
-            lista->elementos[i].particao = lista->elementos[i-1].particao;
+            strcpy(lista->elementos[i].data, lista->elementos[i-1].data);
         }
         // inserindo elemento no inicio (posição 0)
         strcpy(lista->elementos[0].nomeArquivo, nome);
         lista->elementos[0].tamanhoArquivo = tamanho;
-        lista->elementos[0].particao = particao;
+        strcpy(lista->elementos[0].data, dataCriacao);
         ++(lista->id);
         // caso contrário, não há espaço
     } else {
@@ -183,7 +183,7 @@ void listarElementos(Lista *lista) {
     for(i = 0; i < lista->id; ++i) {
         printf("%d. %s\t",(i+1) , lista->elementos[i].nomeArquivo);
         printf("%.2f\t\t", lista->elementos[i].tamanhoArquivo);
-        printf("%c:\t", lista->elementos[i].particao);
+        printf("%s\t", lista->elementos[i].data);
         printf("\n");
     }
     printf("\n");
@@ -210,7 +210,7 @@ int removerElemento(Lista *lista, int id) {
         for(i = id; i < lista->id-1; ++i) {
             strcpy(lista->elementos[i].nomeArquivo, lista->elementos[i+1].nomeArquivo);
             lista->elementos[i].tamanhoArquivo = lista->elementos[i+1].tamanhoArquivo;
-            lista->elementos[i].particao = lista->elementos[i+1].particao;
+            strcpy(lista->elementos[i].data, lista->elementos[i+1].data);
         }
         // após deixar o último espaço vazio, decrementa-se o lista->id, deixando o espaço inacessível
         --(lista->id);
@@ -241,7 +241,7 @@ int removerElementoNome(Lista *lista, char *nome) {
             for (j = i; j < lista->id; ++j) {
                 strcpy(lista->elementos[j].nomeArquivo, lista->elementos[j+1].nomeArquivo);
                 lista->elementos[j].tamanhoArquivo = lista->elementos[j+1].tamanhoArquivo;
-                lista->elementos[j].particao = lista->elementos[j+1].particao;
+                strcpy(lista->elementos[j].data, lista->elementos[j+1].data);
             }
             // após deixar o último espaço vazio, decrementa-se o lista->id, deixando o espaço inacessível
             --(lista->id);
@@ -255,7 +255,7 @@ int removerElementoNome(Lista *lista, char *nome) {
  * Retorno: o tipo de retorno é um inteiro que irá diferenciar entre uma operação bem sucedida ou não
  * Descricao: a função altera um elemento no vetor com os valores passados pelo usuário/programador como parâmetros
  */
-int atualizar(Lista *lista, char *busca, char *nome, float tamanho, char particao) {
+int atualizar(Lista *lista, char *busca, char *nome, float tamanho, char *dataCriacao) {
     int i;
 
     // verifica se a lista foi criada
@@ -271,7 +271,7 @@ int atualizar(Lista *lista, char *busca, char *nome, float tamanho, char partica
             // fazendo a alteração dos valores dos campos pelos valores passados
             strcpy(lista->elementos[i].nomeArquivo, nome);
             lista->elementos[i].tamanhoArquivo = tamanho;
-            lista->elementos[i].particao = particao;
+            strcpy(lista->elementos[i].data, dataCriacao);
             return 1;
         }
     }
@@ -337,7 +337,7 @@ int main() {
     scanf("%d", &opcaoEscolhida);
 
     while (opcaoEscolhida >= 1) {
-
+        printf("\n");
         switch (opcaoEscolhida) {
             case 1: 
                 listarElementos(pendrive);
@@ -351,26 +351,91 @@ int main() {
                 scanf("%d", &opcaoInserir);
                 switch (opcaoInserir) {
                     case 1:
-                        inserirElemento(pendrive, "exercicio1.c", 232.3, 'H');
-                        inserirElemento(pendrive, "exercicio2.c", 232.3, 'H');
-                        inserirElemento(pendrive, "exercicio3.c", 232.3, 'H');
-                        inserirElemento(pendrive, "exercicio4.c", 232.3, 'H');
-                        listarElementos(pendrive);
+                        char nomeArquivoInserir1[30], dataArquivoInserir1[30];
+                        float tamanhoInserir1;
+
+                        int repetir1, pararRepetir1 = 0;
+                        printf("Quantos arquivos serão inseridos? ");
+                        scanf("%d", &repetir1);
+                        fflush(stdin);
+                        do {
+                            printf("Digite os dados que serão inseridos\n");
+
+                            printf("Nome do arquivo: ");
+                            scanf("%s", nomeArquivoInserir1);
+                            printf("Tamanho do arquivo: ");
+                            scanf("%f", &tamanhoInserir1);
+                            fflush(stdin);
+                            printf("Data de criação: ");
+                            scanf("%s", dataArquivoInserir1);
+
+                            inserirElementoInicio(pendrive, nomeArquivoInserir1, tamanhoInserir1, dataArquivoInserir1);
+                            ++pararRepetir1;
+                        } while (repetir1 > pararRepetir1);
                         break;
                     case 2:
-                        inserirElementoInicio(pendrive, "exercicio6.c", 231.3, 'E');
-                        listarElementos(pendrive);
+                        char nomeArquivoInserir2[30], dataArquivoInserir2[30];
+                        float tamanhoInserir2;
+
+                        int repetir2, pararRepetir2 = 0;
+                        printf("Quantos arquivos serão inseridos? ");
+                        scanf("%d", &repetir2);
+                        fflush(stdin);
+                        do {
+                            printf("Digite os dados que serão inseridos\n");
+
+                            printf("Nome do arquivo: ");
+                            scanf("%s", nomeArquivoInserir2);
+                            printf("Tamanho do arquivo: ");
+                            scanf("%f", &tamanhoInserir2);
+                            fflush(stdin);
+                            printf("Data de criação: ");
+                            scanf("%s", dataArquivoInserir2);
+
+                            inserirElemento(pendrive, nomeArquivoInserir2, tamanhoInserir2, dataArquivoInserir2);
+                            ++pararRepetir2;
+                        } while (repetir2 > pararRepetir2);
                         break;
                     case 3:
-                        inserirElementoID(pendrive, "README", 321.3, 'L', 0);
-                        listarElementos(pendrive);
+                        char nomeArquivoInserir3[30], dataArquivoInserir3[30];
+                        float tamanhoInserir3;
+                        int posicao;
+
+                        int repetir3, pararRepetir3 = 0;
+                        printf("Quantos arquivos serão inseridos? ");
+                        scanf("%d", &repetir3);
+                        fflush(stdin);
+                        do {
+                            printf("Digite os dados que serão inseridos\n");
+
+                            printf("Nome do arquivo: ");
+                            scanf("%s", nomeArquivoInserir3);
+                            printf("Tamanho do arquivo: ");
+                            scanf("%f", &tamanhoInserir3);
+                            fflush(stdin);
+                            printf("Data de criação: ");
+                            scanf("%s", dataArquivoInserir3);
+                            printf("Posição que deseja inserir: ");
+                            scanf("%d", &posicao);
+
+                            --posicao;
+
+                            inserirElementoID(pendrive, nomeArquivoInserir3, tamanhoInserir3, dataArquivoInserir3, posicao);
+                            ++pararRepetir3;
+                        } while (repetir3 > pararRepetir3);
                         break;
                     default:
-                        printf("Nao e uma opcao valida!\n");
+                        printf("Nao e uma opcao valida!\n");   
+                        break;
                 }
                 break;
             case 3:
-                int resultadoBusca = buscarElemento(pendrive, "eliseu.c");
+                char busca[30];
+
+                printf("Digite o nome do arquivo que deseja buscar: ");
+                scanf("%s", busca);
+
+                int resultadoBusca = buscarElemento(pendrive, busca);
                 if (resultadoBusca != -1) {
                     printf("O arquivo foi encontrado no pendrive\n");
                     listarElementos(pendrive);
@@ -379,22 +444,48 @@ int main() {
                 }
                 break;
             case 4:
-                int tipoRemocao;
-                printf("Desja remover por indice ou nome? ");
-                scanf("%d", &tipoRemocao);
+                int opcaoRemover;
 
-                switch (tipoRemocao) {
-                    case 1: 
-                        removerElemento(pendrive, 0);
-                        printf("Elemento removido por indice");
+                printf("Deseja remover por nome ou data?\n");
+                printf("1. Por nome\n2. Por data\n");
+                printf("Insira aqui: ");
+                scanf("%d", &opcaoRemover);
+                switch (opcaoRemover) {
+                    case 1:
+                        char nomeArquivoRemover[30];
+                        printf("Digite o nome do arquivo: ");
+                        scanf("%s", nomeArquivoRemover);
+                        
+                        removerElementoNome(pendrive, nomeArquivoRemover);
                         break;
                     case 2:
-                        removerElementoNome(pendrive, "eliseu.c");
-                        printf("Elemento removido por nome");
+                        int posicaoArquivoRemover;
+                        printf("Digite a posição do arquivo que deseja remover: ");
+                        scanf("%d", posicaoArquivoRemover);
+
+                        removerElemento(pendrive, posicaoArquivoRemover);
+                        break;
+                    default:
+                        printf("Opcao invalida\n");
+                        break;
                 }
                 break;
             case 5: 
-                atualizar(pendrive, "exercicio1.c", "eliseu.exe", 123.3, 'E');
+                char nomeArquivoAtual[30], nomeArquivoAtualizado[30], dataArquivoAtualizada[30];
+                float tamanhoArquivoAtualizado;
+
+                printf("Digite o nome do arquivo que deseja atualizar: ");
+                printf("Nome do arquivo que deseja atualizar: ");
+                scanf("%s", nomeArquivoAtual);
+                printf("Insira os novos dados: \n");
+                printf("Novo nome: ");
+                scanf("%s", nomeArquivoAtualizado);
+                printf("Novo tamanho: ");
+                scanf("%f", &tamanhoArquivoAtualizado);
+                printf("Nova data: ");
+                scanf("%s", dataArquivoAtualizada);
+
+                atualizar(pendrive, nomeArquivoAtual, nomeArquivoAtualizado, tamanhoArquivoAtualizado, dataArquivoAtualizada);
                 break;
             case 6:
                 int tamanhoPendrive = tamanho(pendrive);
