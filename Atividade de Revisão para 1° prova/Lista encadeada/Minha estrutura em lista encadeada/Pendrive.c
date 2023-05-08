@@ -130,16 +130,6 @@ int inserirElementoID(Computador *pen_drive, char *nomeArquivo, float tamanhoArq
     p = pen_drive->prim;
 
     int i = 2;
-    
-    // o laço de repetição ira percorrer entre 2 até posição-1 enquanto p for diferente de nulo
-    /*for (i; i < posicao; ++i) {
-        // irá verificar se o próximo nó é nulo, caso verdadeiro, sai do laço
-        if (p == NULL) {
-            break;
-        }
-        // caso contrário p irá apontar para o próximo nó
-        p = p->prox;
-    }*/
 
     for (i; (i < posicao) && (p != NULL); ++i, p = p->prox);
 
