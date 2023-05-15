@@ -8,7 +8,8 @@
 //			  - inserir elemento													 //
 //			  - inserir elemento id													 //
 //			  - inserir elemento inicio												 //
-//			  - listar elemento														 //
+//			  - listar elementos													 //
+//			  - listar elementos ordem inversa										 //
 //			  - remover elemento													 //	
 //			  - remover elemento por nome											 //
 //			  - atualizar															 //
@@ -180,6 +181,31 @@ void listarElementos(Computador *pendrive) {
 	printf("Nome\t\t| Tamanho \t\t| Data\n");
 	printf("----------------------------------------------------\n");
 	for (p = pendrive->prim; p != NULL; p = p->prox) {
+		printf("%s\t| %.2f\t\t\t| %s\t\n", p->nome, p->tamanho, p->data);
+	}
+	printf("\n");
+}
+
+/* Nome: listarElementosOrdemInversa
+ * Parametro: a própria lista     
+ * Retorno: retorna void, é um procedimento para imprimir elementos no prompt
+ * Descricao: função implementada para imprimir elementos da lista em ordem inversa
+ */
+void listarElementosOrdemInversa(Computador *pendrive) {
+	if (pendrive == NULL) {
+		printf("O pendrive nao foi inserido corretamente\n");
+		return ;
+	}
+
+	if (pendrive->prim == NULL) {
+		printf("O pendrive esta vazio\n");
+		return ;
+	}
+	
+	Pendrive *p;
+	printf("Nome\t\t| Tamanho \t\t| Data\n");
+	printf("----------------------------------------------------\n");
+	for (p = pendrive->ult; p != NULL; p = p->ant) {
 		printf("%s\t| %.2f\t\t\t| %s\t\n", p->nome, p->tamanho, p->data);
 	}
 	printf("\n");
@@ -391,7 +417,24 @@ int main() {
 	while(opcaoInicial > 0) {
 		switch (opcaoInicial) {
 			case 1:
-				listarElementos(pendrive);
+				int opcaoListar;
+				
+				printf("Deseja imprimir:\n 1. Em ordem de inserção\n 2. Em ordem inversa\n");
+				printf("Insira aqui: ");
+				scanf("%d", &opcaoListar);
+				
+				printf("\n");
+
+				switch(opcaoListar) {
+					case 1:
+						listarElementos(pendrive);
+						break;
+					case 2:
+						listarElementosOrdemInversa(pendrive);
+						break;
+					default:
+						printf("Opcao invalida\n");
+				}
 				break;
 
 			case 2:
@@ -538,6 +581,8 @@ int main() {
 		printf("Escolha a operacao a ser realizada:\n 1. Ver arquivos\n 2. Inserir arquivos\n 3. Buscar arquivos\n 4. Excluir arquivo\n 5. Atualizar elemento\n 6. Saber quantidade de arquivos\n 7. Excluir lista\n");
 		printf("Insira aqui: ");
 		scanf("%d", &opcaoInicial);
+		
+		printf("\n");
 	} else {
 		break;
 	}
