@@ -17,6 +17,7 @@
 //			  - excluir lista														 //
 ///////////////////////////////////////////////////////////////////////////////////////
 
+// incluindo bibliotecas
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -305,7 +306,7 @@ int atualizar(Computador *pendrive, char *busca, char *nomeAlterado, float taman
 }
 
 /* Nome: buscarElemento
- * Parametro: a própria lista e data     
+ * Parametro: a própria lista e busca     
  * Retorno: retorna um endereço que corresponde a um elemento da lista
  * Descricao: função implementada para buscar elementos na lista
  */
