@@ -76,19 +76,19 @@ int inserirElemento(Computador *pendrive, char *nomeArquivo, float tamanhoArquiv
 
 	memoria->nome = malloc(strlen(nomeArquivo) + 1);
 	memoria->data = malloc(strlen(dataCriacao) + 1);
-
+	   
 	memoria->ant = NULL;
 	strcpy(memoria->nome, nomeArquivo);
 	memoria->tamanho = tamanhoArquivo;
 	strcpy(memoria->data, dataCriacao);
-	memoria->prox = NULL;
+     memoria->prox = NULL;
 
 	if (pendrive->prim == NULL) {
 		pendrive->prim = memoria;
-		pendrive->ult = memoria;
+	   	pendrive->ult = memoria;
 		return 1;
 	}
-
+     
 	memoria->ant = pendrive->ult;
 	pendrive->ult->prox = memoria;
 	pendrive->ult = memoria;
@@ -112,25 +112,35 @@ int inserirElementoID(Computador *pendrive, char *nomeArquivo, float tamanhoArqu
 	memoria->nome = malloc(strlen(nomeArquivo));
 	memoria->data = malloc(strlen(dataCriacao));
 
+	memoria->ant = NULL;
 	strcpy(memoria->nome, nomeArquivo);
 	memoria->tamanho = tamanhoArquivo;
 	strcpy(memoria->data, dataCriacao);
+	memoria->prox = NULL;
 
 	if (pendrive->prim == NULL) {
-		pendrive->prim = memoria;
-		pendrive->ult = memoria;
-		return 1;
+	    pendrive->prim = memoria;
+	    pendrive->ult = memoria;
+	    return 1;
 	}
 
 	Pendrive *p = pendrive->prim;
 	int i = 2;
 	for (i; (i < posicao) && (p != NULL); ++i, p = p->prox);
 	
-	memoria->ant = memoria->prox;
+/*	memoria->ant = memoria->prox;
 	memoria->prox = p->prox;
 	p->prox = memoria;
 	pendrive->ult = memoria;
-
+ */
+	Pendrive *aux;
+	aux = p->prox;
+	aux->ant = p;
+   
+	p->prox = memoria;
+	memoria->ant = p;
+	memoria->prox = aux;
+	aux->ant = memoria;
 	return 1;
 }
 
@@ -150,13 +160,22 @@ int inserirElementoInicio(Computador *pendrive, char *nomeArquivo, float tamanho
 	memoria->nome = malloc(strlen(nomeArquivo) + 1);
 	memoria->data = malloc(strlen(dataCriacao) + 1);	
 
+	memoria->ant = NULL;
 	strcpy(memoria->nome, nomeArquivo);
 	memoria->tamanho = tamanhoArquivo;
 	strcpy(memoria->data, dataCriacao);
+     memoria->prox = NULL;
 
+	if (pendrive->prim == NULL) {
+	    pendrive->prim = memoria;
+	    pendrive->ult = memoria;
+	    return 1;
+	}
+   
+	memoria->ant = NULL;
 	memoria->prox = pendrive->prim;
+	pendrive->prim->ant = memoria;
 	pendrive->prim = memoria;
-	pendrive->ult = memoria;
 
 	return 1;
 }
