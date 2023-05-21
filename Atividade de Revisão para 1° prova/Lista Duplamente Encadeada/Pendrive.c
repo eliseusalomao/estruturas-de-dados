@@ -124,23 +124,16 @@ int inserirElementoID(Computador *pendrive, char *nomeArquivo, float tamanhoArqu
 	    return 1;
 	}
 
-	Pendrive *p = pendrive->prim;
-	int i = 2;
-	for (i; (i < posicao) && (p != NULL); ++i, p = p->prox);
-	
-/*	memoria->ant = memoria->prox;
+	Pendrive *p;
+	int i = 1;
+	for (i, p = pendrive->prim; (i < posicao) && (p != NULL); ++i, p = p->prox);
+
 	memoria->prox = p->prox;
+	memoria->ant = p;
 	p->prox = memoria;
 	pendrive->ult = memoria;
- */
-	Pendrive *aux;
-	aux = p->prox;
-	aux->ant = p;
-   
-	p->prox = memoria;
-	memoria->ant = p;
-	memoria->prox = aux;
-	aux->ant = memoria;
+
+
 	return 1;
 }
 
@@ -409,12 +402,18 @@ int tamanho(Computador *pendrive) {
  */
 Computador* excluirLista(Computador *pendrive) {
 	Pendrive *aux;
-	while(pendrive->prim != NULL) {
+
+	while  (pendrive->prim != NULL) {
 		aux = pendrive->prim;
 		pendrive->prim = pendrive->prim->prox;
+		free(aux->nome);
+		free(aux->data);
 		free(aux);
-		return NULL;
 	}
+
+	printf("Lista excluida!\n");
+
+	return NULL;
 }
 
 /* Nome: main
