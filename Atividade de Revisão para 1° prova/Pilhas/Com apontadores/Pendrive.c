@@ -3,7 +3,7 @@
 * Autor: Eliseu Salomão                                    *
 * Professor: Mayrton Dias                                  *
 * Disciplina: Estrutura de Dados                           *
-* Descrição: implementação de lista com vetor, com as      *
+* Descrição: implementação de pilha com apontadores, com as*
 *            operações de:  criar pilha,                   *   
 *                           push,                          *
 *                           pop,                           *
