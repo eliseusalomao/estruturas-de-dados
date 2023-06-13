@@ -84,7 +84,7 @@ int push(Computador *pendrive, char *nome, float tamanho, char *data) {
 
 /* Nome: push
  * Parametro: a própria pilha.          
- * Retorno: retorna um ponteiro para o elemento que se pretende remover.
+ * Retorno: retorna um inteiro indicando se a operação foi bem sucedida.
  * Descricao: função implementada para remover um elemento da pilha.
  */
 int pop(Computador *pendrive) {
